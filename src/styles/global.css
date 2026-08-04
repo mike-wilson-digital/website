@@ -114,3 +114,38 @@
     color: #ffffff;
   }
 }
+
+/* --- Animated brand gradient text (reusable) ----------------- */
+.text-gradient-animated {
+  background-image: linear-gradient(
+    90deg,
+    #ffe8da 0%,
+    #ffc9a8 25%,
+    #f08a4b 50%,
+    #ffc9a8 75%,
+    #ffe8da 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-pan 5s ease-in-out infinite;
+}
+
+@keyframes gradient-pan {
+  0%,
+  100% {
+    background-position: 0% center;
+  }
+  50% {
+    background-position: 100% center;
+  }
+}
+
+/* Respect users who prefer reduced motion — keep the gradient, drop the pan */
+@media (prefers-reduced-motion: reduce) {
+  .text-gradient-animated {
+    animation: none;
+  }
+}

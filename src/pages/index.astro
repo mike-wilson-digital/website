@@ -1,11 +1,242 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
 <Layout>
-	<Welcome />
+	<div class="relative flex min-h-screen flex-col overflow-hidden">
+		<!-- Warm peach→orange hero glow (brand gradient, adapted for dark) -->
+		<div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[75vh]">
+			<div
+				class="absolute left-1/2 top-[-25%] h-[75vh] w-[130vw] -translate-x-1/2 rounded-[50%] opacity-70 blur-[120px]"
+				style="background: radial-gradient(closest-side, rgba(240,138,75,0.45), rgba(221,51,0,0.16) 55%, transparent 80%);"
+			>
+			</div>
+		</div>
+
+		<!-- Header -->
+		<header class="mx-auto flex w-full max-w-5xl items-center gap-2.5 px-6 py-6">
+			<span
+				class="inline-block h-2.5 w-2.5 rounded-full"
+				style="background: linear-gradient(145deg, #ffc9a8, #f08a4b);"
+				aria-hidden="true"></span>
+			<span class="font-heading text-sm font-bold tracking-tight text-text">Mike Wilson Digital</span>
+		</header>
+
+		<!-- Main -->
+		<main class="mx-auto flex w-full max-w-2xl flex-1 flex-col items-center px-6 py-10">
+			<!-- Hero -->
+			<div class="flex flex-col items-center text-center">
+				<span
+					class="inline-flex items-center gap-2 rounded-full border border-border bg-surface/40 px-3.5 py-1 text-xs font-medium uppercase tracking-[0.15em] text-text-muted backdrop-blur"
+				>
+					<span class="relative flex h-1.5 w-1.5">
+						<span
+							class="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"
+							style="background:#f08a4b;"></span>
+						<span class="relative inline-flex h-1.5 w-1.5 rounded-full" style="background:#f08a4b;"
+						></span>
+					</span>
+					Launching Soon
+				</span>
+
+				<h1
+					class="mt-6 font-heading text-4xl font-black leading-[1.05] tracking-tight text-text sm:text-5xl md:text-6xl"
+				>
+					Mike Wilson Digital<br />
+					<span
+						class="bg-gradient-to-r from-[#ffe8da] via-[#ffc9a8] to-[#f08a4b] bg-clip-text text-transparent"
+						>Is Launching Soon</span
+					>
+				</h1>
+
+				<p class="mt-6 max-w-xl text-lg leading-relaxed text-text-muted">
+					I'm currently building the site and plan to launch sometime in August 2026. Stay tuned!
+				</p>
+			</div>
+
+			<!-- Contact -->
+			<section class="mt-14 w-full" aria-labelledby="contact-heading">
+				<h2 id="contact-heading" class="font-heading text-xl font-bold tracking-tight text-text">
+					Got a question?
+					<span class="font-normal text-text-muted">Send me a message below.</span>
+				</h2>
+
+				<form
+					id="contact-form"
+					class="mt-6 rounded-2xl border border-border bg-surface/60 p-6 shadow-2xl shadow-black/40 backdrop-blur-sm sm:p-8"
+					novalidate
+				>
+					<!-- Web3Forms -->
+					<input type="hidden" name="access_key" value="a9f4b06a-c172-49e5-a00d-4007ea3889c1" />
+					<input type="hidden" name="subject" value="New message from mikewilson.digital" />
+					<input type="hidden" name="from_name" value="mikewilson.digital" />
+					<!-- Honeypot (spam trap) — stays empty for humans -->
+					<input
+						type="checkbox"
+						name="botcheck"
+						class="hidden"
+						style="display:none"
+						tabindex="-1"
+						autocomplete="off"
+						aria-hidden="true"
+					/>
+
+					<div class="grid gap-5">
+						<div>
+							<label for="name" class="mb-1.5 block text-sm font-medium text-text">
+								Name <span class="text-text-muted" aria-hidden="true">*</span>
+							</label>
+							<input
+								id="name"
+								name="name"
+								type="text"
+								required
+								aria-required="true"
+								autocomplete="name"
+								class="w-full rounded-lg border border-slate-500 bg-bg/60 px-4 py-3 text-text transition placeholder:text-text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40"
+								placeholder="Your name"
+							/>
+						</div>
+
+						<div>
+							<label for="email" class="mb-1.5 block text-sm font-medium text-text">
+								Email <span class="text-text-muted" aria-hidden="true">*</span>
+							</label>
+							<input
+								id="email"
+								name="email"
+								type="email"
+								required
+								aria-required="true"
+								autocomplete="email"
+								class="w-full rounded-lg border border-slate-500 bg-bg/60 px-4 py-3 text-text transition placeholder:text-text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40"
+								placeholder="you@example.com"
+							/>
+						</div>
+
+						<div>
+							<label for="message" class="mb-1.5 block text-sm font-medium text-text">
+								Message <span class="text-text-muted" aria-hidden="true">*</span>
+							</label>
+							<textarea
+								id="message"
+								name="message"
+								rows="5"
+								required
+								aria-required="true"
+								class="w-full resize-y rounded-lg border border-slate-500 bg-bg/60 px-4 py-3 text-text transition placeholder:text-text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40"
+								placeholder="What's on your mind?"></textarea>
+						</div>
+
+						<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+							<p class="text-xs text-text-muted">
+								<span aria-hidden="true">*</span> Required fields
+							</p>
+							<button
+								id="submit-btn"
+								type="submit"
+								class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 font-medium text-white shadow-lg shadow-primary/20 transition hover:bg-primary-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+							>
+								<span data-label>Send</span>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 0 20 20"
+									fill="currentColor"
+									class="h-4 w-4"
+									aria-hidden="true"
+								>
+									<path
+										d="M3.105 2.289a.75.75 0 0 0-.826.95l1.414 4.926A1.5 1.5 0 0 0 5.135 9.25h6.115a.75.75 0 0 1 0 1.5H5.135a1.5 1.5 0 0 0-1.442 1.085l-1.414 4.926a.75.75 0 0 0 .826.95 28.897 28.897 0 0 0 15.293-7.155.75.75 0 0 0 0-1.114A28.897 28.897 0 0 0 3.105 2.289Z"
+									></path>
+								</svg>
+							</button>
+						</div>
+					</div>
+
+					<!-- Status: icon + text + role (never color alone) -->
+					<div id="form-status" hidden></div>
+				</form>
+			</section>
+		</main>
+
+		<!-- Footer -->
+		<footer class="mx-auto w-full max-w-5xl px-6 py-8 text-center text-sm text-text-muted">
+			&copy; 2026 MikeWilson.Digital
+		</footer>
+	</div>
 </Layout>
+
+<style>
+	#form-status {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.6rem;
+		margin-top: 1.25rem;
+		padding: 0.75rem 1rem;
+		border-radius: 0.6rem;
+		font-size: 0.9rem;
+		line-height: 1.45;
+		border: 1px solid transparent;
+	}
+	#form-status[data-state='success'] {
+		color: var(--color-success);
+		background: color-mix(in srgb, var(--color-success) 12%, transparent);
+		border-color: color-mix(in srgb, var(--color-success) 35%, transparent);
+	}
+	#form-status[data-state='error'] {
+		color: var(--color-error);
+		background: color-mix(in srgb, var(--color-error) 12%, transparent);
+		border-color: color-mix(in srgb, var(--color-error) 35%, transparent);
+	}
+	#form-status .status-icon {
+		flex: none;
+		font-weight: 700;
+	}
+</style>
+
+<script>
+	const form = document.getElementById('contact-form') as HTMLFormElement;
+	const statusEl = document.getElementById('form-status') as HTMLDivElement;
+	const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+	const btnLabel = submitBtn.querySelector('[data-label]') as HTMLElement;
+
+	function setStatus(state: 'success' | 'error', message: string) {
+		statusEl.hidden = false;
+		statusEl.dataset.state = state;
+		statusEl.setAttribute('role', state === 'error' ? 'alert' : 'status');
+		const icon = state === 'success' ? '✓' : '⚠'; // ✓ / ⚠
+		statusEl.innerHTML = `<span class="status-icon" aria-hidden="true">${icon}</span><span>${message}</span>`;
+	}
+
+	form.addEventListener('submit', async (event) => {
+		event.preventDefault();
+		statusEl.hidden = true;
+		delete statusEl.dataset.state;
+
+		submitBtn.disabled = true;
+		const original = btnLabel.textContent;
+		btnLabel.textContent = 'Sending…';
+
+		try {
+			const payload = Object.fromEntries(new FormData(form).entries());
+			const res = await fetch('https://api.web3forms.com/submit', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+				body: JSON.stringify(payload),
+			});
+			const result = await res.json();
+
+			if (res.ok && result.success) {
+				form.reset();
+				setStatus('success', "Thanks — your message is on its way. I'll get back to you soon.");
+			} else {
+				setStatus('error', result.message || 'Something went wrong. Please try again.');
+			}
+		} catch {
+			setStatus('error', 'Network error. Please check your connection and try again.');
+		} finally {
+			submitBtn.disabled = false;
+			btnLabel.textContent = original;
+		}
+	});
+</script>

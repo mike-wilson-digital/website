@@ -1,1 +1,116 @@
 @import "tailwindcss";
+
+/* ============================================================
+   Mike Wilson Digital — Design System
+   ------------------------------------------------------------
+   Semantic design tokens wired into Tailwind v4. Light values
+   live on :root, dark values on .dark. Change a palette here
+   once and the whole site follows. Utilities generated:
+   bg-surface, text-text-muted, border-border, font-heading, …
+   ============================================================ */
+
+/* Class-based dark mode: `dark:` variant keys off `.dark` on <html>. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Map runtime vars into Tailwind's theme. `inline` keeps utilities
+   pointing at the var() below, so they swap with light/dark. */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-alt: var(--surface-alt);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-border: var(--border);
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-soft: var(--primary-soft);
+
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+
+  --font-heading: "Satoshi", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* --- Light palette (default) --------------------------------- */
+:root {
+  color-scheme: light;
+
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --surface-alt: #eef2f6;
+  --text: #0f172a;
+  --text-muted: #475569;
+  --border: #cbd5e1;
+
+  --primary: #dd3300;
+  --primary-hover: #c2410c;
+  --primary-soft: #fff1e8;
+
+  --success: #15803d;
+  --warning: #b45309;
+  --error: #b91c1c;
+
+  /* Brand hero gradient (the palette's "one polished combo") */
+  --hero-gradient: linear-gradient(
+    145deg,
+    #fff7f2 0%,
+    #ffe8da 35%,
+    #ffc9a8 70%,
+    #f08a4b 100%
+  );
+}
+
+/* --- Dark palette (same orange family, charcoal UI) ---------- */
+.dark {
+  color-scheme: dark;
+
+  --bg: #0b1220;
+  --surface: #111827;
+  --surface-alt: #0f172a;
+  --text: #e5e7eb;
+  --text-muted: #94a3b8;
+  --border: #334155;
+
+  /* CTA stays the brand orange the spec reserves for it.
+     Hover darkens (not brightens) to keep white text >= AA. */
+  --primary: #dd3300;
+  --primary-hover: #c2410c;
+  --primary-soft: #3a1d12;
+
+  /* Status colors lifted for legibility on charcoal */
+  --success: #4ade80;
+  --warning: #fbbf24;
+  --error: #f87171;
+}
+
+/* --- Base ---------------------------------------------------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+  }
+
+  ::selection {
+    background: var(--color-primary);
+    color: #ffffff;
+  }
+}

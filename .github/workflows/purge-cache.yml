@@ -1,0 +1,72 @@
+name: Purge Cloudflare cache on deploy
+
+# After each push to main, wait for the Cloudflare Pages deploy to go
+# live, then purge the zone cache. This evicts any transient 503s that
+# edges may have negative-cached for a freshly-hashed asset during the
+# deploy propagation window (which otherwise leaves the site unstyled).
+#
+# Required repository secrets (Settings -> Secrets and variables -> Actions):
+#   CLOUDFLARE_API_TOKEN  - scoped token with Zone > Cache Purge permission
+#   CLOUDFLARE_ZONE_ID    - the zone ID for mikewilson.digital
+# Until both are set, the workflow no-ops (logs a warning) instead of failing.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # allow manual purges from the Actions tab
+
+concurrency:
+  group: purge-cache
+  cancel-in-progress: false
+
+jobs:
+  purge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for Cloudflare secrets
+        id: check
+        env:
+          TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          ZONE: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+        run: |
+          if [ -n "$TOKEN" ] && [ -n "$ZONE" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::CLOUDFLARE_API_TOKEN / CLOUDFLARE_ZONE_ID not set — skipping purge."
+          fi
+
+      - name: Wait for the deploy to go live
+        # Only on real pushes; manual runs purge immediately.
+        if: steps.check.outputs.ready == 'true' && github.event_name == 'push'
+        env:
+          SHA: ${{ github.sha }}
+        run: |
+          echo "Waiting for build-commit=$SHA to appear on the live site..."
+          for i in $(seq 1 40); do
+            live=$(curl -s https://www.mikewilson.digital/ \
+              | grep -o 'name="build-commit" content="[^"]*"' \
+              | sed 's/.*content="//; s/"$//')
+            echo "[$i] live build-commit: ${live:-none}"
+            if [ "$live" = "$SHA" ]; then
+              echo "Deploy is live."
+              exit 0
+            fi
+            sleep 15
+          done
+          echo "::warning::Timed out waiting for the deploy; purging anyway."
+
+      - name: Purge Cloudflare cache
+        if: steps.check.outputs.ready == 'true'
+        env:
+          TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          ZONE: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+        run: |
+          resp=$(curl -s -X POST \
+            "https://api.cloudflare.com/client/v4/zones/$ZONE/purge_cache" \
+            -H "Authorization: Bearer $TOKEN" \
+            -H "Content-Type: application/json" \
+            --data '{"purge_everything":true}')
+          echo "$resp"
+          echo "$resp" | grep -q '"success":true' || { echo "::error::Cache purge failed."; exit 1; }
+          echo "Cache purged."

@@ -27,6 +27,9 @@
   --color-primary-hover: var(--primary-hover);
   --color-primary-soft: var(--primary-soft);
 
+  --color-cta: var(--cta);
+  --color-cta-hover: var(--cta-hover);
+
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-error: var(--error);
@@ -60,6 +63,10 @@
   --primary-hover: #ea580c;
   --primary-soft: #3a1d12;
 
+  /* Signature CTA orange — same in both themes for consistency */
+  --cta: #dd3300;
+  --cta-hover: #c2410c;
+
   --success: #4ade80;
   --warning: #fbbf24;
   --error: #f87171;
@@ -80,6 +87,10 @@
   --primary: #dd3300;
   --primary-hover: #c2410c;
   --primary-soft: #fff1e8;
+
+  /* Signature CTA orange — same in both themes for consistency */
+  --cta: #dd3300;
+  --cta-hover: #c2410c;
 
   --success: #15803d;
   --warning: #b45309;

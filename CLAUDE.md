@@ -12,7 +12,9 @@ repository-first production build — the template for future client projects.
 - **GitHub** for source control
 - Node `>=22.12.0`
 
-Deployment is not decided yet. Database, auth, client portal, and a headless
+Deployed on **Cloudflare Pages**, auto-deploying on every push to `main`.
+Asset caching is controlled by `public/_headers` (content-hashed `/_astro/*`
+assets are cached immutable). Database, auth, client portal, and a headless
 CMS are deferred — not required initially.
 
 ## Source of truth

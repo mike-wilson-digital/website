@@ -1,14 +1,18 @@
 ---
 import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 
 interface Props {
 	title?: string;
 	description?: string;
+	noindex?: boolean;
 }
 
 const {
 	title = 'Mike Wilson Digital — Launching Soon',
 	description = 'Mike Wilson Digital is launching soon. A repository-first digital studio. Have a question? Send a message.',
+	noindex = false,
 } = Astro.props;
 
 // Commit SHA of this build (set by Cloudflare Pages). Used by the
@@ -43,6 +47,7 @@ const commitSha = process.env.CF_PAGES_COMMIT_SHA || 'dev';
 		<meta name="generator" content={Astro.generator} />
 		<meta name="description" content={description} />
 		<meta name="build-commit" content={commitSha} />
+		{noindex && <meta name="robots" content="noindex, follow" />}
 
 		<!-- Fonts — Inter (Google) for body/UI, Satoshi (Fontshare) for headings -->
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -71,6 +76,19 @@ const commitSha = process.env.CF_PAGES_COMMIT_SHA || 'dev';
 		>
 		<!-- End Google Tag Manager (noscript) -->
 
-		<slot />
+		<div class="relative flex min-h-screen flex-col overflow-hidden">
+			<!-- Subtle orange hero glow on the dark background (sitewide) -->
+			<div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[75vh]">
+				<div
+					class="absolute left-1/2 top-[-25%] h-[75vh] w-[130vw] -translate-x-1/2 rounded-[50%] opacity-60 blur-[120px]"
+					style="background: radial-gradient(closest-side, rgba(249,115,22,0.3), rgba(249,115,22,0.1) 55%, transparent 78%);"
+				>
+				</div>
+			</div>
+
+			<Header />
+			<slot />
+			<Footer />
+		</div>
 	</body>
 </html>

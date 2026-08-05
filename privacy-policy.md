@@ -8,7 +8,7 @@ I keep this simple and honest: I collect only what I need, I don't sell your dat
 
 ## Who I am
 
-Mike Wilson Digital LLC is an independent business based in Connecticut, USA. If you have any questions about this policy or your data, email me at **mike@mikewilson.digital**.
+Mike Wilson Digital LLC is an independent business based in Connecticut, USA. If you have any questions about this policy or your data, reach me through my [contact form](/contact).
 
 ## Information I collect
 
@@ -53,7 +53,7 @@ You can:
 - **Request correction or deletion** of your information.
 - **Opt out** of analytics via your browser or an opt-out extension.
 
-Depending on where you live (for example, under the Connecticut Data Privacy Act, and similar laws in other states or regions), you may have additional rights over your personal data. To exercise any of these, just email me at **mike@mikewilson.digital** and I'll take care of it.
+Depending on where you live (for example, under the Connecticut Data Privacy Act, and similar laws in other states or regions), you may have additional rights over your personal data. To exercise any of these, just reach out through my [contact form](/contact) and I'll take care of it.
 
 ## Children's privacy
 
@@ -69,4 +69,4 @@ I may update this policy from time to time. When I do, I'll revise the "Effectiv
 
 ## Contact
 
-Questions about this policy or your data? Email **mike@mikewilson.digital**.
+Questions about this policy or your data? Reach me through my [contact form](/contact).

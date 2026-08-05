@@ -6,42 +6,11 @@ import { Content } from '../../privacy-policy.md';
 <Layout
 	title="Privacy Policy — Mike Wilson Digital"
 	description="How Mike Wilson Digital LLC collects, uses, and protects your information."
+	noindex
 >
-	<div class="flex min-h-screen flex-col">
-		<!-- Header -->
-		<header class="mx-auto flex w-full max-w-3xl items-center justify-between gap-4 px-6 py-6">
-			<a
-				href="/"
-				class="inline-flex items-center gap-2.5 rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
-			>
-				<span
-					class="inline-block h-2.5 w-2.5 rounded-full"
-					style="background: linear-gradient(145deg, #fdba74, #f97316);"
-					aria-hidden="true"></span>
-
-				<span class="font-heading text-sm font-bold tracking-tight text-text">Mike Wilson Digital</span
-				>
-			</a>
-			<a
-				href="/"
-				class="rounded-sm text-sm text-text-muted underline-offset-2 transition-colors hover:text-primary hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
-			>
-				&larr; Back home
-			</a>
-		</header>
-
-		<!-- Content -->
-		<main class="mx-auto w-full max-w-3xl flex-1 px-6 py-10">
-			<article class="prose">
-				<Content />
-			</article>
-		</main>
-
-		<!-- Footer -->
-		<footer class="mt-8 border-t border-border/60">
-			<div class="mx-auto w-full max-w-3xl px-6 py-8 text-sm text-text-muted">
-				&copy; 2026 MikeWilson.Digital
-			</div>
-		</footer>
-	</div>
+	<main class="mx-auto w-full max-w-3xl flex-1 px-6 py-10">
+		<article class="prose">
+			<Content />
+		</article>
+	</main>
 </Layout>

@@ -1,0 +1,150 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+	title="Contact — Mike Wilson Digital"
+	description="Got a question, or just want to connect? Send Mike Wilson Digital a note."
+	noindex
+>
+	<main class="mx-auto w-full max-w-xl flex-1 px-6 py-10">
+		<h1 class="font-heading text-4xl font-black tracking-tight text-text">Contact</h1>
+		<p class="mt-4 text-lg leading-relaxed text-text-muted">
+			Got a question, or just want to connect? Send me a note and I'll get back to you.
+		</p>
+
+		<form
+			id="contact-form"
+			class="mt-8 rounded-2xl border border-border bg-surface/60 p-6 shadow-2xl shadow-black/40 backdrop-blur-sm sm:p-8"
+			novalidate
+		>
+			<!-- Web3Forms -->
+			<input type="hidden" name="access_key" value="a9f4b06a-c172-49e5-a00d-4007ea3889c1" />
+			<input type="hidden" name="subject" value="New message from mikewilson.digital" />
+			<input type="hidden" name="from_name" value="mikewilson.digital" />
+			<!-- Honeypot (spam trap) — stays empty for humans -->
+			<input
+				type="checkbox"
+				name="botcheck"
+				class="hidden"
+				style="display:none"
+				tabindex="-1"
+				autocomplete="off"
+				aria-hidden="true"
+			/>
+
+			<div class="grid gap-5">
+				<div class="field">
+					<input
+						id="name"
+						name="name"
+						type="text"
+						required
+						aria-required="true"
+						autocomplete="name"
+						placeholder=" "
+					/>
+					<label for="name">Name <span aria-hidden="true">*</span></label>
+				</div>
+
+				<div class="field">
+					<input
+						id="email"
+						name="email"
+						type="email"
+						required
+						aria-required="true"
+						autocomplete="email"
+						placeholder=" "
+					/>
+					<label for="email">Email <span aria-hidden="true">*</span></label>
+				</div>
+
+				<div class="field">
+					<textarea
+						id="message"
+						name="message"
+						rows="5"
+						required
+						aria-required="true"
+						placeholder=" "></textarea>
+					<label for="message">Message <span aria-hidden="true">*</span></label>
+				</div>
+
+				<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+					<p class="text-xs text-text-muted">
+						<span aria-hidden="true">*</span> Required fields
+					</p>
+					<button
+						id="contact-submit"
+						type="submit"
+						class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-cta px-6 py-3 font-semibold text-white shadow-lg shadow-cta/20 transition hover:bg-cta-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+					>
+						<span data-label>Send</span>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 20 20"
+							fill="currentColor"
+							class="h-4 w-4"
+							aria-hidden="true"
+						>
+							<path
+								d="M3.105 2.289a.75.75 0 0 0-.826.95l1.414 4.926A1.5 1.5 0 0 0 5.135 9.25h6.115a.75.75 0 0 1 0 1.5H5.135a1.5 1.5 0 0 0-1.442 1.085l-1.414 4.926a.75.75 0 0 0 .826.95 28.897 28.897 0 0 0 15.293-7.155.75.75 0 0 0 0-1.114A28.897 28.897 0 0 0 3.105 2.289Z"
+							></path>
+						</svg>
+					</button>
+				</div>
+			</div>
+
+			<!-- Status: icon + text + role (never color alone) -->
+			<div id="contact-status" class="form-status" hidden></div>
+		</form>
+	</main>
+</Layout>
+
+<script>
+	const form = document.getElementById('contact-form') as HTMLFormElement;
+	const statusEl = document.getElementById('contact-status') as HTMLDivElement;
+	const submitBtn = document.getElementById('contact-submit') as HTMLButtonElement;
+	const btnLabel = submitBtn.querySelector('[data-label]') as HTMLElement;
+
+	function setStatus(state: 'success' | 'error', message: string) {
+		statusEl.hidden = false;
+		statusEl.dataset.state = state;
+		statusEl.setAttribute('role', state === 'error' ? 'alert' : 'status');
+		const icon = state === 'success' ? '✓' : '⚠';
+		statusEl.innerHTML = `<span class="status-icon" aria-hidden="true">${icon}</span><span>${message}</span>`;
+	}
+
+	form.addEventListener('submit', async (event) => {
+		event.preventDefault();
+		statusEl.hidden = true;
+		delete statusEl.dataset.state;
+
+		submitBtn.disabled = true;
+		const original = btnLabel.textContent;
+		btnLabel.textContent = 'Sending…';
+
+		try {
+			const payload = Object.fromEntries(new FormData(form).entries());
+			const res = await fetch('https://api.web3forms.com/submit', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+				body: JSON.stringify(payload),
+			});
+			const result = await res.json();
+
+			if (res.ok && result.success) {
+				form.reset();
+				setStatus('success', "Thanks — your message is on its way. I'll get back to you soon.");
+			} else {
+				setStatus('error', result.message || 'Something went wrong. Please try again.');
+			}
+		} catch {
+			setStatus('error', 'Network error. Please check your connection and try again.');
+		} finally {
+			submitBtn.disabled = false;
+			btnLabel.textContent = original;
+		}
+	});
+</script>

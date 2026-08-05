@@ -235,3 +235,127 @@
   border-top: 1px solid var(--color-border);
   margin-top: 2.5rem;
 }
+
+/* --- Form status message (success / error), reusable ---------- */
+.form-status {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.6rem;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  border: 1px solid transparent;
+}
+
+.form-status[data-state='success'] {
+  color: var(--color-success);
+  background: color-mix(in srgb, var(--color-success) 12%, transparent);
+  border-color: color-mix(in srgb, var(--color-success) 35%, transparent);
+}
+
+.form-status[data-state='error'] {
+  color: var(--color-error);
+  background: color-mix(in srgb, var(--color-error) 12%, transparent);
+  border-color: color-mix(in srgb, var(--color-error) 35%, transparent);
+}
+
+.form-status .status-icon {
+  flex: none;
+  font-weight: 700;
+}
+
+/* --- Material-style outlined fields with a floating label -----
+   Token-driven (raw theme vars) so the fields swap with the theme. */
+.field {
+  position: relative;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  font: inherit; /* Inter, 16px */
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--field-border);
+  border-radius: 0.5rem;
+  padding: 0.9rem 1rem;
+  outline: none;
+  caret-color: var(--primary);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.field textarea {
+  display: block;
+  min-height: 8rem;
+  resize: vertical;
+}
+
+.field input:hover,
+.field textarea:hover {
+  border-color: var(--text-muted);
+}
+
+/* Focused control → orange accent (dark accent #F97316) */
+.field input:focus,
+.field textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
+/* Hide the single-space placeholder that drives :placeholder-shown */
+.field input::placeholder,
+.field textarea::placeholder {
+  color: transparent;
+}
+
+.field label {
+  position: absolute;
+  left: 0.65rem;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0 0.35rem;
+  color: var(--text-muted); /* resting label = muted */
+  font-size: 1rem;
+  line-height: 1;
+  pointer-events: none;
+  transition:
+    top 0.15s ease,
+    font-size 0.15s ease,
+    color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+/* Textarea: rest the label near the top, where text starts */
+.field textarea + label {
+  top: 1.5rem;
+}
+
+/* Float on focus OR whenever the field has a value.
+   The :not(:placeholder-shown) rule keeps it up after blur. */
+.field input:focus + label,
+.field input:not(:placeholder-shown) + label,
+.field textarea:focus + label,
+.field textarea:not(:placeholder-shown) + label {
+  top: 0;
+  font-size: 0.75rem;
+  background: var(--bg); /* notch matches the field fill */
+  color: var(--text-muted); /* filled + blurred = muted */
+}
+
+/* While focused, the floated label matches the orange border */
+.field input:focus + label,
+.field textarea:focus + label {
+  color: var(--primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .field input,
+  .field textarea,
+  .field label {
+    transition: none;
+  }
+}

@@ -4,11 +4,11 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout>
 	<div class="relative flex min-h-screen flex-col overflow-hidden">
-		<!-- Warm peach→orange hero glow (brand gradient, adapted for dark) -->
+		<!-- Subtle orange hero glow on the dark background (dark-mode treatment) -->
 		<div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[75vh]">
 			<div
-				class="absolute left-1/2 top-[-25%] h-[75vh] w-[130vw] -translate-x-1/2 rounded-[50%] opacity-70 blur-[120px]"
-				style="background: radial-gradient(closest-side, rgba(240,138,75,0.45), rgba(221,51,0,0.16) 55%, transparent 80%);"
+				class="absolute left-1/2 top-[-25%] h-[75vh] w-[130vw] -translate-x-1/2 rounded-[50%] opacity-60 blur-[120px]"
+				style="background: radial-gradient(closest-side, rgba(249,115,22,0.3), rgba(249,115,22,0.1) 55%, transparent 78%);"
 			>
 			</div>
 		</div>
@@ -17,7 +17,7 @@ import Layout from '../layouts/Layout.astro';
 		<header class="mx-auto flex w-full max-w-5xl items-center gap-2.5 px-6 py-6">
 			<span
 				class="inline-block h-2.5 w-2.5 rounded-full"
-				style="background: linear-gradient(145deg, #ffc9a8, #f08a4b);"
+				style="background: linear-gradient(145deg, #fdba74, #f97316);"
 				aria-hidden="true"></span>
 			<span class="font-heading text-sm font-bold tracking-tight text-text">Mike Wilson Digital</span>
 		</header>
@@ -32,8 +32,8 @@ import Layout from '../layouts/Layout.astro';
 					<span class="relative flex h-1.5 w-1.5">
 						<span
 							class="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"
-							style="background:#f08a4b;"></span>
-						<span class="relative inline-flex h-1.5 w-1.5 rounded-full" style="background:#f08a4b;"
+							style="background:#f97316;"></span>
+						<span class="relative inline-flex h-1.5 w-1.5 rounded-full" style="background:#f97316;"
 						></span>
 					</span>
 					Launching Soon
@@ -78,10 +78,7 @@ import Layout from '../layouts/Layout.astro';
 					/>
 
 					<div class="grid gap-5">
-						<div>
-							<label for="name" class="mb-1.5 block text-sm font-medium text-text">
-								Name <span class="text-text-muted" aria-hidden="true">*</span>
-							</label>
+						<div class="field">
 							<input
 								id="name"
 								name="name"
@@ -89,15 +86,12 @@ import Layout from '../layouts/Layout.astro';
 								required
 								aria-required="true"
 								autocomplete="name"
-								class="w-full rounded-lg border border-slate-500 bg-bg/60 px-4 py-3 text-text transition placeholder:text-text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40"
-								placeholder="Your name"
+								placeholder=" "
 							/>
+							<label for="name">Name <span aria-hidden="true">*</span></label>
 						</div>
 
-						<div>
-							<label for="email" class="mb-1.5 block text-sm font-medium text-text">
-								Email <span class="text-text-muted" aria-hidden="true">*</span>
-							</label>
+						<div class="field">
 							<input
 								id="email"
 								name="email"
@@ -105,23 +99,20 @@ import Layout from '../layouts/Layout.astro';
 								required
 								aria-required="true"
 								autocomplete="email"
-								class="w-full rounded-lg border border-slate-500 bg-bg/60 px-4 py-3 text-text transition placeholder:text-text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40"
-								placeholder="you@example.com"
+								placeholder=" "
 							/>
+							<label for="email">Email <span aria-hidden="true">*</span></label>
 						</div>
 
-						<div>
-							<label for="message" class="mb-1.5 block text-sm font-medium text-text">
-								Message <span class="text-text-muted" aria-hidden="true">*</span>
-							</label>
+						<div class="field">
 							<textarea
 								id="message"
 								name="message"
 								rows="5"
 								required
 								aria-required="true"
-								class="w-full resize-y rounded-lg border border-slate-500 bg-bg/60 px-4 py-3 text-text transition placeholder:text-text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40"
-								placeholder="What's on your mind?"></textarea>
+								placeholder=" "></textarea>
+							<label for="message">Message <span aria-hidden="true">*</span></label>
 						</div>
 
 						<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -131,7 +122,7 @@ import Layout from '../layouts/Layout.astro';
 							<button
 								id="submit-btn"
 								type="submit"
-								class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 font-medium text-white shadow-lg shadow-primary/20 transition hover:bg-primary-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+								class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 font-semibold text-[#0b1220] shadow-lg shadow-primary/20 transition hover:bg-primary-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
 							>
 								<span data-label>Send</span>
 								<svg
@@ -236,6 +227,100 @@ import Layout from '../layouts/Layout.astro';
 	#form-status .status-icon {
 		flex: none;
 		font-weight: 700;
+	}
+
+	/* --- Material-style outlined fields with a floating label ---
+	   Token-driven (raw theme vars) so the fields swap with the theme. */
+	.field {
+		position: relative;
+	}
+
+	.field input,
+	.field textarea {
+		width: 100%;
+		font: inherit; /* Inter, 16px */
+		color: var(--text);
+		background: var(--bg);
+		border: 1px solid var(--field-border);
+		border-radius: 0.5rem;
+		padding: 0.9rem 1rem;
+		outline: none;
+		caret-color: var(--primary);
+		transition:
+			border-color 0.15s ease,
+			box-shadow 0.15s ease;
+	}
+
+	.field textarea {
+		display: block;
+		min-height: 8rem;
+		resize: vertical;
+	}
+
+	.field input:hover,
+	.field textarea:hover {
+		border-color: var(--text-muted);
+	}
+
+	/* Focused control → orange accent (dark accent #F97316) */
+	.field input:focus,
+	.field textarea:focus {
+		border-color: var(--primary);
+		box-shadow: 0 0 0 1px var(--primary);
+	}
+
+	/* Hide the single-space placeholder that drives :placeholder-shown */
+	.field input::placeholder,
+	.field textarea::placeholder {
+		color: transparent;
+	}
+
+	.field label {
+		position: absolute;
+		left: 0.65rem;
+		top: 50%;
+		transform: translateY(-50%);
+		padding: 0 0.35rem;
+		color: var(--text-muted); /* resting label = muted */
+		font-size: 1rem;
+		line-height: 1;
+		pointer-events: none;
+		transition:
+			top 0.15s ease,
+			font-size 0.15s ease,
+			color 0.15s ease,
+			background-color 0.15s ease;
+	}
+
+	/* Textarea: rest the label near the top, where text starts */
+	.field textarea + label {
+		top: 1.5rem;
+	}
+
+	/* Float on focus OR whenever the field has a value.
+	   The :not(:placeholder-shown) rule is what keeps it up after blur. */
+	.field input:focus + label,
+	.field input:not(:placeholder-shown) + label,
+	.field textarea:focus + label,
+	.field textarea:not(:placeholder-shown) + label {
+		top: 0;
+		font-size: 0.75rem;
+		background: var(--bg); /* notch matches the field fill */
+		color: var(--text-muted); /* filled + blurred = muted */
+	}
+
+	/* While focused, the floated label matches the orange border */
+	.field input:focus + label,
+	.field textarea:focus + label {
+		color: var(--primary);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.field input,
+		.field textarea,
+		.field label {
+			transition: none;
+		}
 	}
 </style>
 

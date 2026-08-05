@@ -3,14 +3,15 @@
 /* ============================================================
    Mike Wilson Digital — Design System
    ------------------------------------------------------------
-   Semantic design tokens wired into Tailwind v4. Light values
-   live on :root, dark values on .dark. Change a palette here
-   once and the whole site follows. Utilities generated:
+   Semantic design tokens wired into Tailwind v4. The site is
+   DARK BY DEFAULT: <html data-theme="dark">. Dark values live on
+   [data-theme="dark"], light values on [data-theme="light"], so a
+   light toggle can be added later with zero rework. Utilities:
    bg-surface, text-text-muted, border-border, font-heading, …
    ============================================================ */
 
-/* Class-based dark mode: `dark:` variant keys off `.dark` on <html>. */
-@custom-variant dark (&:where(.dark, .dark *));
+/* Attribute-based theming: `dark:` variant keys off [data-theme="dark"]. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 /* Map runtime vars into Tailwind's theme. `inline` keeps utilities
    pointing at the var() below, so they swap with light/dark. */
@@ -34,37 +35,13 @@
   --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
-/* --- Light palette (default) --------------------------------- */
+/* Force dark form controls, scrollbars, and browser chrome by default. */
 :root {
-  color-scheme: light;
-
-  --bg: #f8fafc;
-  --surface: #ffffff;
-  --surface-alt: #eef2f6;
-  --text: #0f172a;
-  --text-muted: #475569;
-  --border: #cbd5e1;
-
-  --primary: #dd3300;
-  --primary-hover: #c2410c;
-  --primary-soft: #fff1e8;
-
-  --success: #15803d;
-  --warning: #b45309;
-  --error: #b91c1c;
-
-  /* Brand hero gradient (the palette's "one polished combo") */
-  --hero-gradient: linear-gradient(
-    145deg,
-    #fff7f2 0%,
-    #ffe8da 35%,
-    #ffc9a8 70%,
-    #f08a4b 100%
-  );
+  color-scheme: dark;
 }
 
-/* --- Dark palette (same orange family, charcoal UI) ---------- */
-.dark {
+/* --- Dark palette (DEFAULT — <html data-theme="dark">) ------- */
+[data-theme="dark"] {
   color-scheme: dark;
 
   --bg: #0b1220;
@@ -73,17 +50,40 @@
   --text: #e5e7eb;
   --text-muted: #94a3b8;
   --border: #334155;
+  /* Lighter than --border so resting input outlines clear WCAG 1.4.11
+     non-text contrast (3:1) on the dark fill; #334155 (~1.8:1) fails. */
+  --field-border: #64748b;
 
-  /* CTA stays the brand orange the spec reserves for it.
-     Hover darkens (not brightens) to keep white text >= AA. */
-  --primary: #dd3300;
-  --primary-hover: #c2410c;
+  /* Dark accent (palette dark-mode section). Used for focus, the
+     floating-label focus color, the primary CTA, and hovers. */
+  --primary: #f97316;
+  --primary-hover: #ea580c;
   --primary-soft: #3a1d12;
 
-  /* Status colors lifted for legibility on charcoal */
   --success: #4ade80;
   --warning: #fbbf24;
   --error: #f87171;
+}
+
+/* --- Light palette (kept for a future toggle; not active) ---- */
+[data-theme="light"] {
+  color-scheme: light;
+
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --surface-alt: #eef2f6;
+  --text: #0f172a;
+  --text-muted: #475569;
+  --border: #cbd5e1;
+  --field-border: #cbd5e1;
+
+  --primary: #dd3300;
+  --primary-hover: #c2410c;
+  --primary-soft: #fff1e8;
+
+  --success: #15803d;
+  --warning: #b45309;
+  --error: #b91c1c;
 }
 
 /* --- Base ---------------------------------------------------- */
@@ -111,7 +111,7 @@
 
   ::selection {
     background: var(--color-primary);
-    color: #ffffff;
+    color: #0b1220;
   }
 }
 
@@ -204,15 +204,6 @@
 
 .prose a:hover {
   color: var(--color-primary-hover);
-}
-
-/* Brighter accent for links on dark, to keep AA contrast */
-.dark .prose a {
-  color: #f97316;
-}
-
-.dark .prose a:hover {
-  color: #fb923c;
 }
 
 .prose ul {

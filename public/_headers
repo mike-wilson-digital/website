@@ -1,0 +1,7 @@
+# Cloudflare Pages headers
+# Content-hashed build assets never change for a given URL, so cache them
+# forever and mark immutable. This avoids must-revalidate round-trips to the
+# origin (which can surface transient 503s to visitors when a fresh asset
+# hash is still propagating).
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable

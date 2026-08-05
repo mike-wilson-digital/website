@@ -198,7 +198,15 @@ import Layout from '../layouts/Layout.astro';
 					</svg>
 				</a>
 			</div>
-			<p class="mt-5">&copy; 2026 MikeWilson.Digital</p>
+			<p class="mt-5">
+				&copy; 2026 MikeWilson.Digital
+				<span class="mx-1.5 text-text-muted/50" aria-hidden="true">&middot;</span>
+				<a
+					href="/privacy"
+					class="rounded-sm underline-offset-2 transition-colors hover:text-primary hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+					>Privacy Policy</a
+				>
+			</p>
 		</footer>
 	</div>
 </Layout>

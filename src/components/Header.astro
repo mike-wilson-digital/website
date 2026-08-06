@@ -53,6 +53,7 @@ import logoLight from '../assets/logo/mw-digital-light.svg';
 <script>
 	const btn = document.getElementById('theme-toggle');
 	const root = document.documentElement;
+	let transitionTimer: number | undefined;
 
 	const syncLabel = () => {
 		const isDark = root.getAttribute('data-theme') !== 'light';
@@ -63,6 +64,8 @@ import logoLight from '../assets/logo/mw-digital-light.svg';
 
 	btn?.addEventListener('click', () => {
 		const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+		// Enable the cross-theme transition just for this flip, then remove it.
+		root.classList.add('theme-transition');
 		root.setAttribute('data-theme', next);
 		root.style.colorScheme = next;
 		try {
@@ -71,5 +74,7 @@ import logoLight from '../assets/logo/mw-digital-light.svg';
 			/* ignore */
 		}
 		syncLabel();
+		window.clearTimeout(transitionTimer);
+		transitionTimer = window.setTimeout(() => root.classList.remove('theme-transition'), 550);
 	});
 </script>

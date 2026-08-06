@@ -6,6 +6,12 @@ import Footer from '../components/Footer.astro';
 interface Props {
 	title?: string;
 	description?: string;
+	/** Overrides og:title / twitter:title (defaults to `title`). */
+	ogTitle?: string;
+	/** Overrides og:description / twitter:description (defaults to `description`). */
+	ogDescription?: string;
+	/** Social share image, resolved to an absolute URL. */
+	image?: string;
 	noindex?: boolean;
 	header?: boolean;
 	footer?: boolean;
@@ -14,6 +20,9 @@ interface Props {
 const {
 	title = 'Mike Wilson Digital — Launching Soon',
 	description = 'Mike Wilson Digital is launching soon. A repository-first digital studio. Have a question? Send a message.',
+	ogTitle,
+	ogDescription,
+	image = '/og.png',
 	noindex = false,
 	header = true,
 	footer = true,
@@ -22,6 +31,48 @@ const {
 // Commit SHA of this build (set by Cloudflare Pages). Used by the
 // post-deploy cache-purge workflow to detect when a deploy is live.
 const commitSha = process.env.CF_PAGES_COMMIT_SHA || 'dev';
+
+// Canonical + absolute social image (self-referencing, www).
+const siteURL = Astro.site ?? new URL('https://www.mikewilson.digital');
+const canonicalURL = new URL(Astro.url.pathname, siteURL).href;
+const ogImageURL = new URL(image, siteURL).href;
+const socialTitle = ogTitle ?? title;
+const socialDescription = ogDescription ?? description;
+
+// Sitewide structured data: Person + Organization + WebSite.
+const origin = siteURL.origin;
+const jsonLd = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		{
+			'@type': 'Person',
+			'@id': `${origin}/#person`,
+			name: 'Mike Wilson',
+			url: origin,
+			worksFor: { '@id': `${origin}/#organization` },
+			sameAs: [
+				'https://www.linkedin.com/in/mwilson51/',
+				'https://x.com/MikeWilson51',
+				'https://github.com/mwilson777',
+				'https://www.instagram.com/mrobertwilson',
+				'https://www.facebook.com/mikerobertwilson',
+			],
+		},
+		{
+			'@type': 'Organization',
+			'@id': `${origin}/#organization`,
+			name: 'Mike Wilson Digital LLC',
+			url: origin,
+			founder: { '@id': `${origin}/#person` },
+		},
+		{
+			'@type': 'WebSite',
+			'@id': `${origin}/#website`,
+			name: 'Mike Wilson Digital',
+			url: origin,
+		},
+	],
+};
 ---
 
 <!doctype html>
@@ -52,6 +103,27 @@ const commitSha = process.env.CF_PAGES_COMMIT_SHA || 'dev';
 		<meta name="description" content={description} />
 		<meta name="build-commit" content={commitSha} />
 		{noindex && <meta name="robots" content="noindex, follow" />}
+
+		<link rel="canonical" href={canonicalURL} />
+
+		<!-- Open Graph -->
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="Mike Wilson Digital" />
+		<meta property="og:title" content={socialTitle} />
+		<meta property="og:description" content={socialDescription} />
+		<meta property="og:url" content={canonicalURL} />
+		<meta property="og:image" content={ogImageURL} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+
+		<!-- Twitter -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={socialTitle} />
+		<meta name="twitter:description" content={socialDescription} />
+		<meta name="twitter:image" content={ogImageURL} />
+
+		<!-- Structured data: Person + Organization + WebSite -->
+		<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
 		<!-- Fonts — Inter (Google) for body/UI, Satoshi (Fontshare) for headings -->
 		<link rel="preconnect" href="https://fonts.googleapis.com" />

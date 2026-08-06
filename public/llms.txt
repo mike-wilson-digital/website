@@ -1,0 +1,17 @@
+# Mike Wilson Digital
+
+An AI-first website system, built in the open by Mike Wilson: a starter kit
+for shipping fast, production-ready websites with Astro, Cloudflare, and AI.
+The site's primary goal is the email list — join for early access to the kit.
+
+## Bio
+
+Mike Wilson — builder shipping fast, production-ready websites with an
+AI-first workflow (Astro + Cloudflare + AI), in the open.
+
+## Key pages
+
+- Home (email signup): https://www.mikewilson.digital/
+- Links (socials + signup): https://www.mikewilson.digital/links
+- Contact: https://www.mikewilson.digital/contact
+- Privacy Policy: https://www.mikewilson.digital/privacy

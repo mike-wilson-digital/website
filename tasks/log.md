@@ -6,6 +6,19 @@ is completed or blocked.
 
 ---
 
+## 2026-08-06 — Ignore `.claude/`
+
+Added `.claude/` to the repo `.gitignore` (it was previously only covered by a global
+exclude, so it could be committed by someone with a different global config). Confirmed it
+no longer appears in `git status`. Note: 4 new untracked logo files (`mw-mark-*`,
+`mw-tile-*`) appeared in `src/assets/logo/` — left untracked as out of scope.
+
+## 2026-08-06 — Theme cross-fade (backfilled — shipped as 51ec840)
+
+Cross-fade the light/dark flip: a temporary `.theme-transition` class transitions
+background/text/border/fill over 0.45s, scoped to the toggle so hover/focus stay instant,
+and skipped under `prefers-reduced-motion`.
+
 ## 2026-08-06 — Light/dark mode toggle
 
 Added a header sun/moon toggle that switches `data-theme` on `<html>` between dark

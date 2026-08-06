@@ -1,0 +1,185 @@
+---
+// Kit email signup — combined "pill" field. Reused on / and /links.
+// Same endpoint / field / double-opt-in success + error handling.
+interface Props {
+	class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<form id="signup-form" class:list={['w-full max-w-lg', className]} novalidate>
+	<div class="signup-pill">
+		<label for="email_address" class="sr-only">Email address</label>
+		<input
+			id="email_address"
+			name="email_address"
+			type="email"
+			required
+			aria-required="true"
+			autocomplete="email"
+			placeholder="Enter your email"
+		/>
+		<button
+			id="signup-btn"
+			type="submit"
+			class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-cta px-6 py-3 font-semibold text-white shadow-lg shadow-cta/20 transition hover:bg-cta-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:rounded-full sm:shadow-none"
+		>
+			<span data-label>Get early access</span>
+		</button>
+	</div>
+
+	<!-- Honeypot: hidden from humans; bots that fill it are rejected -->
+	<div
+		aria-hidden="true"
+		style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;"
+	>
+		<input type="text" name="hp_field" tabindex="-1" autocomplete="off" />
+	</div>
+
+	<p class="mt-3 text-center text-xs text-text-muted">No spam. Unsubscribe anytime.</p>
+	<div id="signup-status" class="form-status" hidden></div>
+</form>
+
+<style>
+	/* Combined email signup "pill": stacks on mobile, one bordered
+	   pill with the button tucked inside on sm+ screens. */
+	.signup-pill {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.signup-pill input {
+		width: 100%;
+		font: inherit; /* Inter, 16px */
+		color: var(--text);
+		background: var(--bg);
+		border: 1px solid var(--field-border);
+		border-radius: 0.5rem;
+		padding: 0.9rem 1rem;
+		outline: none;
+		caret-color: var(--primary);
+		transition:
+			border-color 0.15s ease,
+			box-shadow 0.15s ease;
+	}
+
+	.signup-pill input::placeholder {
+		color: var(--text-muted);
+	}
+
+	/* Mobile (stacked): the input's own border shows the focus accent */
+	.signup-pill input:focus {
+		border-color: var(--primary);
+		box-shadow: 0 0 0 1px var(--primary);
+	}
+
+	/* Combined pill on wider screens */
+	@media (min-width: 640px) {
+		.signup-pill {
+			flex-direction: row;
+			align-items: center;
+			gap: 0.5rem;
+			background: var(--bg);
+			border: 1px solid var(--field-border);
+			border-radius: 9999px;
+			padding: 0.4rem 0.4rem 0.4rem 1.5rem;
+			transition:
+				border-color 0.15s ease,
+				box-shadow 0.15s ease;
+		}
+
+		/* Focus glow on the whole pill while the input is focused */
+		.signup-pill:focus-within {
+			border-color: var(--primary);
+			box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 30%, transparent);
+		}
+
+		.signup-pill input {
+			flex: 1;
+			width: auto;
+			border: 0;
+			background: transparent;
+			border-radius: 0;
+			padding: 0.5rem 0.5rem 0.5rem 0;
+			box-shadow: none;
+		}
+
+		.signup-pill input:focus {
+			border: 0;
+			box-shadow: none; /* the pill container handles the glow */
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.signup-pill,
+		.signup-pill input {
+			transition: none;
+		}
+	}
+</style>
+
+<script>
+	const form = document.getElementById('signup-form') as HTMLFormElement | null;
+
+	if (form) {
+		const statusEl = document.getElementById('signup-status') as HTMLDivElement;
+		const submitBtn = document.getElementById('signup-btn') as HTMLButtonElement;
+		const btnLabel = submitBtn.querySelector('[data-label]') as HTMLElement;
+
+		// Kit (ConvertKit) form endpoint. Form ID is public — safe to commit.
+		const KIT_ENDPOINT = 'https://app.kit.com/forms/9768960/subscriptions';
+
+		const SUCCESS_MSG =
+			'Almost there — I just sent you a confirmation email. Click the link inside to lock in your spot, and you’ll be first to get the kit.';
+		const ERROR_MSG = 'Something went wrong — give it another try in a sec.';
+
+		const setStatus = (state: 'success' | 'error', message: string) => {
+			statusEl.hidden = false;
+			statusEl.dataset.state = state;
+			statusEl.setAttribute('role', state === 'error' ? 'alert' : 'status');
+			const icon = state === 'success' ? '✓' : '⚠';
+			statusEl.innerHTML = `<span class="status-icon" aria-hidden="true">${icon}</span><span>${message}</span>`;
+		};
+
+		form.addEventListener('submit', async (event) => {
+			event.preventDefault();
+
+			// Honeypot: if a bot filled the hidden field, feign success and bail.
+			const hp = form.elements.namedItem('hp_field') as HTMLInputElement | null;
+			if (hp && hp.value.trim() !== '') {
+				form.reset();
+				setStatus('success', SUCCESS_MSG);
+				return;
+			}
+
+			statusEl.hidden = true;
+			delete statusEl.dataset.state;
+			submitBtn.disabled = true;
+			const original = btnLabel.textContent;
+			btnLabel.textContent = 'Sending…';
+
+			try {
+				const data = new FormData(form);
+				data.delete('hp_field');
+				const res = await fetch(KIT_ENDPOINT, {
+					method: 'POST',
+					headers: { Accept: 'application/json' },
+					body: data,
+				});
+
+				if (res.ok) {
+					form.reset();
+					setStatus('success', SUCCESS_MSG);
+				} else {
+					setStatus('error', ERROR_MSG);
+				}
+			} catch {
+				setStatus('error', ERROR_MSG);
+			} finally {
+				submitBtn.disabled = false;
+				btnLabel.textContent = original;
+			}
+		});
+	}
+</script>

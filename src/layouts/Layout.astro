@@ -7,12 +7,16 @@ interface Props {
 	title?: string;
 	description?: string;
 	noindex?: boolean;
+	header?: boolean;
+	footer?: boolean;
 }
 
 const {
 	title = 'Mike Wilson Digital — Launching Soon',
 	description = 'Mike Wilson Digital is launching soon. A repository-first digital studio. Have a question? Send a message.',
 	noindex = false,
+	header = true,
+	footer = true,
 } = Astro.props;
 
 // Commit SHA of this build (set by Cloudflare Pages). Used by the
@@ -86,9 +90,9 @@ const commitSha = process.env.CF_PAGES_COMMIT_SHA || 'dev';
 				</div>
 			</div>
 
-			<Header />
+			{header && <Header />}
 			<slot />
-			<Footer />
+			{footer && <Footer />}
 		</div>
 	</body>
 </html>

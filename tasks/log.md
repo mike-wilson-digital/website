@@ -6,6 +6,12 @@ is completed or blocked.
 
 ---
 
+## 2026-08-06 — Commit brand mark SVGs
+
+Tracked the four `[mw]` icon marks in `src/assets/logo/` (`mw-mark-orange/offwhite.svg` bare
+marks + `mw-tile-dark-orange/offwhite.svg` dark app-icon tiles, rx=0 for GitHub's rounding),
+committed unmodified.
+
 ## 2026-08-06 — Ignore `.claude/`
 
 Added `.claude/` to the repo `.gitignore` (it was previously only covered by a global

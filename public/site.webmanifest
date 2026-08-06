@@ -1,0 +1,11 @@
+{
+	"name": "Mike Wilson Digital",
+	"short_name": "MW Digital",
+	"icons": [
+		{ "src": "/favicon-32.png", "type": "image/png", "sizes": "32x32" },
+		{ "src": "/icon-512.png", "type": "image/png", "sizes": "512x512" }
+	],
+	"theme_color": "#0b1220",
+	"background_color": "#0b1220",
+	"display": "standalone"
+}

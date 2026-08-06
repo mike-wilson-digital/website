@@ -66,3 +66,17 @@ Consult these before related work:
 - [Adding or managing content](https://docs.astro.build/en/guides/content-collections/)
 - [Adding styles or using Tailwind](https://docs.astro.build/en/guides/styling/)
 - [Supporting multiple languages](https://docs.astro.build/en/guides/internationalization/)
+
+## Command-center handoff
+
+This project runs a two-agent workflow: a **Cowork "command center"** (Claude) owns
+strategy and writes specs; **Claude Code** (you) executes in the repo.
+
+- The current task lives in **`tasks/next.md`**. When Mike says "run the next task" (or
+  points you there), read it, execute it exactly, honor its acceptance criteria and its
+  commit/push instruction, and work one step at a time — check with Mike before each commit
+  unless the task explicitly says otherwise.
+- When a task is done (or you hit a blocker), append a short dated entry to **`tasks/log.md`**
+  (newest at top): what you did, what changed, and anything Mike or the command center should
+  know. Keep it brief — it's how the command center reads your results back.
+- If `tasks/next.md` has no active task, don't guess — ask Mike.

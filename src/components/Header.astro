@@ -1,16 +1,31 @@
 ---
 // Sitewide header — rendered by Layout on every page.
+// Dark logo shows now; light logo is wired for the future light-mode toggle
+// (swaps automatically with [data-theme]).
+import logoDark from '../assets/logo/mw-digital-dark.svg';
+import logoLight from '../assets/logo/mw-digital-light.svg';
 ---
 
-<header class="mx-auto flex w-full max-w-5xl items-center gap-2.5 px-6 py-6">
+<header class="mx-auto flex w-full max-w-5xl items-center px-6 py-6">
 	<a
 		href="/"
-		class="inline-flex items-center gap-2.5 rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+		class="inline-flex rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
 	>
-		<span
-			class="inline-block h-2.5 w-2.5 rounded-full"
-			style="background: linear-gradient(145deg, #fdba74, #f97316);"
-			aria-hidden="true"></span>
-		<span class="font-heading text-sm font-bold tracking-tight text-text">Mike Wilson Digital</span>
+		<img
+			src={logoDark.src}
+			width={logoDark.width}
+			height={logoDark.height}
+			alt="[mw] digital — Mike Wilson Digital"
+			class="hidden h-7 w-auto dark:block"
+			loading="eager"
+		/>
+		<img
+			src={logoLight.src}
+			width={logoLight.width}
+			height={logoLight.height}
+			alt="[mw] digital — Mike Wilson Digital"
+			class="h-7 w-auto dark:hidden"
+			loading="eager"
+		/>
 	</a>
 </header>

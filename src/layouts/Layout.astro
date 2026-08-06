@@ -80,7 +80,18 @@ const jsonLd = {
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta name="color-scheme" content="dark" />
+
+		<!-- Apply the saved theme before first paint (defaults to dark) to avoid a flash -->
+		<script is:inline>
+			(function () {
+				try {
+					var t = localStorage.getItem('theme');
+					if (t !== 'light' && t !== 'dark') t = 'dark';
+					document.documentElement.setAttribute('data-theme', t);
+					document.documentElement.style.colorScheme = t;
+				} catch (e) {}
+			})();
+		</script>
 
 		<!-- Google Tag Manager -->
 		<script is:inline>

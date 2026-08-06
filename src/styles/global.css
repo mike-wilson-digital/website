@@ -161,6 +161,19 @@
   }
 }
 
+/* Light mode: deeper-orange stops so the headline stays legible on a light bg
+   (the peach stops used on dark would wash out on white). */
+[data-theme="light"] .text-gradient-animated {
+  background-image: linear-gradient(
+    90deg,
+    #dd3300 0%,
+    #ea580c 25%,
+    #c2410c 50%,
+    #ea580c 75%,
+    #dd3300 100%
+  );
+}
+
 /* --- Prose: readable long-form content (reusable) ------------ */
 .prose {
   max-width: 68ch;

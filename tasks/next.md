@@ -1,6 +1,6 @@
 # Next task
 
-**Status:** ready — run after the current SEO/meta + logo push is committed.
+**Status:** ✅ Done 2026-08-06 (see `tasks/log.md`). No active task — awaiting the next spec from the command center.
 
 ## Task
 Add a light / dark mode toggle.

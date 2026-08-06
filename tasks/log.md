@@ -6,6 +6,11 @@ is completed or blocked.
 
 ---
 
+## 2026-08-06 — Enlarge header logo
+
+Bumped the header wordmark from `h-7` to `h-8 sm:h-9` (32px mobile / 36px desktop) on both
+the dark and light `<img>`. Toggle still right-aligned, no layout break; build clean.
+
 ## 2026-08-06 — Commit brand mark SVGs
 
 Tracked the four `[mw]` icon marks in `src/assets/logo/` (`mw-mark-orange/offwhite.svg` bare

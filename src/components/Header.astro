@@ -52,30 +52,38 @@ import logoLight from '../assets/logo/mw-digital-light.svg';
 </header>
 
 <script>
-	const btn = document.getElementById('theme-toggle');
 	const root = document.documentElement;
 	let transitionTimer: number | undefined;
 
-	const syncLabel = () => {
-		const isDark = root.getAttribute('data-theme') !== 'light';
-		btn?.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
-	};
+	// Re-attach on every View Transition navigation (the header re-renders, and
+	// bundled scripts run only once per session).
+	function initThemeToggle() {
+		const btn = document.getElementById('theme-toggle');
+		if (!btn) return;
 
-	syncLabel();
+		const syncLabel = () => {
+			const isDark = root.getAttribute('data-theme') !== 'light';
+			btn.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+		};
 
-	btn?.addEventListener('click', () => {
-		const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-		// Enable the cross-theme transition just for this flip, then remove it.
-		root.classList.add('theme-transition');
-		root.setAttribute('data-theme', next);
-		root.style.colorScheme = next;
-		try {
-			localStorage.setItem('theme', next);
-		} catch (e) {
-			/* ignore */
-		}
 		syncLabel();
-		window.clearTimeout(transitionTimer);
-		transitionTimer = window.setTimeout(() => root.classList.remove('theme-transition'), 550);
-	});
+
+		btn.addEventListener('click', () => {
+			const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+			// Enable the cross-theme transition just for this flip, then remove it.
+			root.classList.add('theme-transition');
+			root.setAttribute('data-theme', next);
+			root.style.colorScheme = next;
+			try {
+				localStorage.setItem('theme', next);
+			} catch (e) {
+				/* ignore */
+			}
+			syncLabel();
+			window.clearTimeout(transitionTimer);
+			transitionTimer = window.setTimeout(() => root.classList.remove('theme-transition'), 550);
+		});
+	}
+
+	document.addEventListener('astro:page-load', initThemeToggle);
 </script>

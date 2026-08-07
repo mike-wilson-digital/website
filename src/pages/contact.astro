@@ -105,12 +105,14 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <script>
-	const form = document.getElementById('contact-form') as HTMLFormElement;
-	const statusEl = document.getElementById('contact-status') as HTMLDivElement;
-	const submitBtn = document.getElementById('contact-submit') as HTMLButtonElement;
-	const btnLabel = submitBtn.querySelector('[data-label]') as HTMLElement;
+	function initContact() {
+		const form = document.getElementById('contact-form') as HTMLFormElement | null;
+		if (!form) return;
+		const statusEl = document.getElementById('contact-status') as HTMLDivElement;
+		const submitBtn = document.getElementById('contact-submit') as HTMLButtonElement;
+		const btnLabel = submitBtn.querySelector('[data-label]') as HTMLElement;
 
-	function setStatus(state: 'success' | 'error', message: string) {
+		function setStatus(state: 'success' | 'error', message: string) {
 		statusEl.hidden = false;
 		statusEl.dataset.state = state;
 		statusEl.setAttribute('role', state === 'error' ? 'alert' : 'status');
@@ -149,4 +151,7 @@ import Layout from '../layouts/Layout.astro';
 			btnLabel.textContent = original;
 		}
 	});
+	}
+
+	document.addEventListener('astro:page-load', initContact);
 </script>

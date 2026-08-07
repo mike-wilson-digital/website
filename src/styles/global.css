@@ -146,6 +146,9 @@
   --warning: #fbbf24;
   --error: #f87171;
   --info: #58a6ff; /* in-code / info links (syntax-inspired) */
+
+  /* Sitewide dot-grid texture (§6) — the monospace grid made faintly visible. */
+  --dot: rgba(148, 163, 184, 0.075);
 }
 
 /* --- Light palette (kept for a future toggle; not active) ---- */
@@ -172,6 +175,9 @@
   --warning: #b45309;
   --error: #b91c1c;
   --info: #0969da; /* darker blue for AA on the light paper */
+
+  /* Sitewide dot-grid texture (§6) — a touch stronger to read on paper. */
+  --dot: rgba(71, 85, 105, 0.1);
 }
 
 /* --- Base ---------------------------------------------------- */
@@ -182,6 +188,9 @@
 
   body {
     background-color: var(--color-bg);
+    /* Faint dot-grid: structural texture from the medium (§6), behind content. */
+    background-image: radial-gradient(circle, var(--dot) 1px, transparent 1.2px);
+    background-size: 30px 30px;
     color: var(--color-text);
     font-family: var(--font-body);
     font-variant-numeric: tabular-nums;

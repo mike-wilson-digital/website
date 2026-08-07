@@ -41,8 +41,34 @@ const { class: className = '' } = Astro.props;
 </form>
 
 <style>
-	/* Combined email signup "pill": stacks on mobile, one bordered
-	   pill with the button tucked inside on sm+ screens. */
+	/* Signature: an always-on, slow conic-gradient ring on the signup field —
+	   mostly-dim with one brighter arc drifting around (~5.5s). Pure CSS via an
+	   animatable --a angle. Button stays inside the ring. (§9, approved 2026-08-07) */
+	@property --a {
+		syntax: '<angle>';
+		inherits: false;
+		initial-value: 0deg;
+	}
+
+	@keyframes signup-ring-spin {
+		to {
+			--a: 360deg;
+		}
+	}
+
+	/* The drifting ring: a two-layer background (solid fill + conic border-box). */
+	.signup-pill,
+	.signup-pill input {
+		--ring: conic-gradient(
+			from var(--a),
+			rgba(221, 51, 0, 0.16) 0 235deg,
+			#ff5a2a 300deg,
+			rgba(221, 51, 0, 0.16) 350deg
+		);
+	}
+
+	/* Combined email signup "pill": stacks on mobile, one ringed pill with the
+	   button tucked inside on sm+ screens. */
 	.signup-pill {
 		display: flex;
 		flex-direction: column;
@@ -54,46 +80,45 @@ const { class: className = '' } = Astro.props;
 		font-family: var(--font-mono); /* form controls = mono */
 		font-size: 1rem;
 		color: var(--text);
-		background: var(--bg);
-		border: 1px solid var(--field-border);
+		border: 1.5px solid transparent;
 		border-radius: var(--radius);
+		/* Mobile (stacked): the ring lives on the input itself. */
+		background:
+			linear-gradient(var(--bg), var(--bg)) padding-box,
+			var(--ring) border-box;
+		animation: signup-ring-spin 5.5s linear infinite;
 		padding: 0.9rem 1rem;
 		outline: none;
 		caret-color: var(--primary);
-		transition:
-			border-color 0.15s ease,
-			box-shadow 0.15s ease;
+		transition: box-shadow 0.15s ease;
 	}
 
 	.signup-pill input::placeholder {
 		color: var(--text-muted);
 	}
 
-	/* Mobile (stacked): the input's own border shows the focus accent */
 	.signup-pill input:focus {
-		border-color: var(--primary);
-		box-shadow: 0 0 0 1px var(--primary);
+		box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 22%, transparent);
 	}
 
-	/* Combined pill on wider screens */
+	/* Combined pill on wider screens: the ring moves to the whole pill. */
 	@media (min-width: 640px) {
 		.signup-pill {
 			flex-direction: row;
 			align-items: center;
 			gap: 0.5rem;
-			background: var(--bg);
-			border: 1px solid var(--field-border);
+			border: 1.5px solid transparent;
 			border-radius: var(--radius);
+			background:
+				linear-gradient(var(--bg), var(--bg)) padding-box,
+				var(--ring) border-box;
+			animation: signup-ring-spin 5.5s linear infinite;
 			padding: 0.4rem 0.4rem 0.4rem 1rem;
-			transition:
-				border-color 0.15s ease,
-				box-shadow 0.15s ease;
+			transition: box-shadow 0.15s ease;
 		}
 
-		/* Focus glow on the whole pill while the input is focused */
 		.signup-pill:focus-within {
-			border-color: var(--primary);
-			box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 30%, transparent);
+			box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 22%, transparent);
 		}
 
 		.signup-pill input {
@@ -103,27 +128,47 @@ const { class: className = '' } = Astro.props;
 			background: transparent;
 			border-radius: 0;
 			padding: 0.5rem 0.5rem 0.5rem 0;
+			animation: none;
 			box-shadow: none;
 		}
 
 		.signup-pill input:focus {
-			border: 0;
-			box-shadow: none; /* the pill container handles the glow */
+			box-shadow: none; /* the pill container carries the ring/focus */
 		}
 	}
 
+	/* Reduced motion: freeze the ring to a static orange outline. */
 	@media (prefers-reduced-motion: reduce) {
 		.signup-pill,
 		.signup-pill input {
+			animation: none;
 			transition: none;
+		}
+
+		.signup-pill input {
+			background:
+				linear-gradient(var(--bg), var(--bg)) padding-box,
+				linear-gradient(rgba(221, 51, 0, 0.6), rgba(221, 51, 0, 0.6)) border-box;
+		}
+	}
+
+	@media (min-width: 640px) and (prefers-reduced-motion: reduce) {
+		.signup-pill {
+			background:
+				linear-gradient(var(--bg), var(--bg)) padding-box,
+				linear-gradient(rgba(221, 51, 0, 0.6), rgba(221, 51, 0, 0.6)) border-box;
+		}
+
+		.signup-pill input {
+			background: transparent;
 		}
 	}
 </style>
 
 <script>
-	const form = document.getElementById('signup-form') as HTMLFormElement | null;
-
-	if (form) {
+	function initSignup() {
+		const form = document.getElementById('signup-form') as HTMLFormElement | null;
+		if (!form) return;
 		const statusEl = document.getElementById('signup-status') as HTMLDivElement;
 		const submitBtn = document.getElementById('signup-btn') as HTMLButtonElement;
 		const btnLabel = submitBtn.querySelector('[data-label]') as HTMLElement;
@@ -183,4 +228,6 @@ const { class: className = '' } = Astro.props;
 			}
 		});
 	}
+
+	document.addEventListener('astro:page-load', initSignup);
 </script>

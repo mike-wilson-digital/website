@@ -2,8 +2,8 @@
 // Sitewide footer — rendered by Layout on every page.
 ---
 
-<footer class="mx-auto w-full max-w-5xl border-t border-border px-6 py-8 text-center font-mono text-sm text-text-muted">
-	<div class="flex items-center justify-center gap-6">
+<footer class="mx-auto w-full max-w-5xl border-t border-border px-6 py-10 font-mono text-sm text-text-muted">
+	<div class="flex items-center gap-5">
 		<a
 			href="https://www.linkedin.com/in/mwilson51/"
 			target="_blank"
@@ -44,19 +44,28 @@
 			</svg>
 		</a>
 	</div>
-	<p class="mt-5">
-		&copy; 2026 MikeWilson.Digital
-		<span class="mx-1.5 text-text-muted/50" aria-hidden="true">&middot;</span>
-		<a
-			href="/contact"
-			class="rounded-sm underline-offset-2 transition-colors hover:text-primary hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
-			>Contact</a
-		>
-		<span class="mx-1.5 text-text-muted/50" aria-hidden="true">&middot;</span>
-		<a
-			href="/privacy"
-			class="rounded-sm underline-offset-2 transition-colors hover:text-primary hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
-			>Privacy Policy</a
-		>
+	<!-- File-tree sitemap motif (§6): the site as a path listing. -->
+	<nav class="mt-7 leading-relaxed" aria-label="Sitemap">
+		<div class="text-text-muted">mikewilson.digital/</div>
+		<div>
+			<span class="text-text-muted/50" aria-hidden="true">├─&nbsp;</span>
+			<a
+				href="/contact"
+				class="rounded-sm underline-offset-2 transition-colors hover:text-primary hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+				>~/contact</a
+			>
+		</div>
+		<div>
+			<span class="text-text-muted/50" aria-hidden="true">└─&nbsp;</span>
+			<a
+				href="/privacy"
+				class="rounded-sm underline-offset-2 transition-colors hover:text-primary hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+				>~/privacy</a
+			>
+		</div>
+	</nav>
+
+	<p class="mt-7 text-xs text-text-muted/70">
+		<span class="text-text-muted/50" aria-hidden="true">//&nbsp;</span>&copy; 2026 Mike Wilson Digital LLC
 	</p>
 </footer>

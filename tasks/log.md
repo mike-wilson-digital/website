@@ -6,6 +6,33 @@ is completed or blocked.
 
 ---
 
+## 2026-08-07 — Design retrofit, Phase 3 (developer-native signature)
+
+Added the signature layer per brief §6, honoring the §7 guardrails. **Dot-grid background**:
+`--dot` token per theme (dark `rgba(148,163,184,.075)`, light `rgba(71,85,105,.10)`), one
+`radial-gradient` `background-image` on `body`, `background-size: 30px`. **Animated signup
+ring**: replaced the pill's static border + `:focus-within` glow with an always-on conic
+ring — `@property --a` angle + `@keyframes signup-ring-spin` (5.5s), two-layer bg
+(`linear-gradient padding-box, conic-gradient border-box`), one bright arc drifting on a
+mostly-dim ring, button inside; mobile puts the ring on the input; freezes to a static
+`rgba(221,51,0,.6)` ring under `prefers-reduced-motion`. Pure CSS, homepage field only.
+**Glyph language**: home kicker → `// Mike Wilson Digital` (slashes tinted `--primary/70`);
+footer paths `~/contact` `~/privacy`. **File-tree footer**: left-aligned socials +
+`mikewilson.digital/` root with `├─`/`└─` children, `// © …` sign-off. **View Transitions**:
+`<ClientRouter />`; theme re-applied on `astro:after-swap` (no nav flash, verified both
+directions); toggle re-inits on `astro:page-load`; both form scripts (signup + contact)
+wrapped in `astro:page-load` so they re-bind after nav. **Console easter egg** (two styled
+lines). **Benign VT abort suppressed**: a narrow `unhandledrejection`/`error` handler
+swallows only `InvalidStateError: Transition was aborted` (surfaced on nav in the automated
+browser; Mike-approved suppression 2026-08-07) — console verified clean after nav.
+
+Deferred: **code-as-content** — nothing on the site teaches the method step-by-step yet;
+belongs on the real kit/method pages. Files: `Layout.astro`, `Header.astro`, `Footer.astro`,
+`SignupForm.astro`, `index.astro`, `contact.astro`, `global.css`. No recolor; GTM/SEO/
+JSON-LD/sitemap/anti-flash script untouched; toggle + cross-fade preserved. Build clean
+(4 pages); verified all pages in dark + light, plus VT nav + toggle + theme persistence.
+Committed + pushed as its own commit. **Retrofit complete — all three phases shipped.**
+
 ## 2026-08-07 — Design retrofit, Phase 2 (de-generic layout pass)
 
 Worked the brief's §2 anti-generic table page by page. **Homepage hero → left-aligned

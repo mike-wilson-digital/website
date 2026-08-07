@@ -1,5 +1,9 @@
 # Next task — Retrofit the live site to the new design system
 
+> ✅ **DONE 2026-08-07** — all three phases shipped (P1 `b915f81`, P2 `9f239c5`, P3 this
+> commit). See `tasks/log.md` for per-phase details. No active task — command center to
+> queue the next one.
+
 **Goal:** apply the new design system (`docs/design-principles.md`) to the *existing*
 site — not just future pages. Type system, tokens, anti-generic layout, and a restrained
 developer-native signature.

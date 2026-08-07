@@ -67,6 +67,15 @@ Consult these before related work:
 - [Adding styles or using Tailwind](https://docs.astro.build/en/guides/styling/)
 - [Supporting multiple languages](https://docs.astro.build/en/guides/internationalization/)
 
+## Design
+
+All design and styling decisions follow **`docs/design-principles.md`** — the design
+source of truth: the type system (Satoshi headings / Sentient serif body / Commit Mono
+signature voice), color/token rules, the anti-generic constraints, the developer-native
+signature, and the accessibility/performance non-negotiables. **Read it before any
+styling, component, or page work**, and build against it rather than reaching for
+defaults. If a default and that doc disagree, the doc wins.
+
 ## Command-center handoff
 
 This project runs a two-agent workflow: a **Cowork "command center"** (Claude) owns

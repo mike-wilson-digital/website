@@ -114,6 +114,14 @@ hero, **no** typewriter H1, **no** glow/matrix/glitch, **no** mono on body prose
   `prefers-reduced-motion`. Pure CSS — no JS, no asset. Homepage field only. **Keep the
   tempo (~5.5s) slow and desynced from the headline gradient pan (~5s)** so the two hero
   motions don't compete.
+- **Distinct headline accent in both themes** (Mike, 2026-08-07 — folded in from the Phase 2
+  review): the hero accent word ("AI-first") currently uses `text-primary`, which collapses
+  to the CTA color `#dd3300` in light mode. Give it a **dedicated accent token** so it stays
+  a distinct accent orange in *both* themes and never equals the CTA — dark `#f97316`
+  (unchanged), light `#ea580c` (a distinct orange; verify it clears AA large-text ~3:1 on
+  `#f8fafc`, nudge slightly deeper only if needed, but **not** `#dd3300`). Add the token to
+  both `[data-theme]` blocks + a `--color-*` mapping in `@theme inline`, and swap the span's
+  class from `text-primary` to the new one. `#dd3300` stays CTA-only.
 - Mono kickers with prompt/path glyphs (`~$`, `//`, `>`) used consistently as a language.
 - Footer: a file-tree / path-style sitemap motif.
 - Code-as-content where the page teaches the method — real, copyable snippets with syntax

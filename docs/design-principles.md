@@ -224,9 +224,10 @@ These are part of the design, not an afterthought. Builders check them.
   freezes to a static orange ring under `prefers-reduced-motion`. Exact CSS in the Phase 3
   spec.
 - **Hero headline accent** (final 2026-08-07): the accent word ("AI-first") is a **solid
-  accent orange** (`--primary` / `#f97316`) — no gradient, no animation. Clean and legible;
-  this keeps the hero's *only* motion the opt-in border. `#dd3300` stays reserved for the
-  CTA button so the two oranges don't compete.
+  accent orange** via a **dedicated token** — `#f97316` in dark, `#ea580c` in light — kept
+  **distinct from the CTA `#dd3300` in both themes** so the two oranges never collide. It
+  must NOT ride `--primary` (that flips to `#dd3300` in light). The light value must clear
+  AA large-text (~3:1) on the `#f8fafc` paper. No gradient, no animation.
 - **Links:** underline on hover with an offset; in-prose links can borrow `--info`. Nav
   links are mono, muted, orange on active/hover.
 - **Buttons/secondary:** ghost/outline with hairline border; no gradients, no shadows.

@@ -1,148 +1,77 @@
-# Next task — Retrofit the live site to the new design system
+# Next task — Blog engine (the build-in-public spine)
 
-> ✅ **DONE 2026-08-07** — all three phases shipped (P1 `b915f81`, P2 `9f239c5`, P3 this
-> commit). See `tasks/log.md` for per-phase details. No active task — command center to
-> queue the next one.
+**Goal:** stand up a repo-first blog so the weekly build-in-public post has a home.
+Content = Markdown/MDX files in the repo (the AI is the CMS). The blog must look like it
+belongs to the site, not bolted on — it inherits the existing design system, not a new one.
 
-**Goal:** apply the new design system (`docs/design-principles.md`) to the *existing*
-site — not just future pages. Type system, tokens, anti-generic layout, and a restrained
-developer-native signature.
+**Before anything:** read `docs/design-principles.md`, and reuse the existing `.prose`
+styles + design tokens already in `src/styles/global.css`. Do **not** restyle the site or
+add new fonts/colors. The whole point is the blog rides the retrofit we just shipped:
+Sentient serif prose, Satoshi headings, Commit Mono for code/metadata, hairline lists,
+sharp radii, dot-grid background, left-aligned editorial.
 
-**Before anything:** read `docs/design-principles.md` in full. Build against it. The live
-color tokens in `src/styles/global.css` are canonical — **do not recolor**; the only
-deliberate palette-adjacent change is sharper radii (see Phase 1).
+## Build
 
-**How to run this:** three phases, **one at a time**. After each phase, run
-`npm run build`, show Mike the result, and **WAIT for his OK before committing and before
-starting the next phase**. This is a high-touch redesign — do not batch phases or
-auto-commit. Don't touch analytics/GTM/GA4, SEO/meta, JSON-LD, the sitemap, or the
-anti-flash theme script. Preserve the light/dark toggle + cross-fade behavior.
+1. **Content collection** (`astro:content`) — define a `blog` collection (config file per
+   the installed Astro version: `src/content.config.ts` w/ a `glob()` loader on Astro 5,
+   else `src/content/config.ts`). Zod schema: `title` (string), `description` (string),
+   `pubDate` (date), `updatedDate` (date, optional), `draft` (boolean, default false),
+   `tags` (string[], optional), `ogImage` (string, optional). Posts live in
+   `src/content/blog/*.md(x)`; slug from filename.
 
----
+2. **Routes:**
+   - **`/blog` — index.** List published posts (exclude `draft` in a production build),
+     newest first by `pubDate`. Render as a **hairline-ruled list** in the same style as
+     `/links` — each row = mono `pubDate` (tabular-nums) + title + optional tags, `border-b`
+     rows, orange hover, left-aligned on the `max-w-5xl` spine. Not cards.
+   - **`/blog/[...slug]` — post page** via `getStaticPaths` over the collection. Render
+     `<Content />` inside `<article class="prose">`. Header block above the prose: a mono
+     kicker (`~/blog`), Satoshi H1 title, and a mono metadata line (pubDate, "updated"
+     date if present, reading time, tags). Body uses the existing `.prose`. **Code blocks:**
+     make sure fenced code renders in Commit Mono on `--surface` with a hairline border and
+     `--radius`, using the syntax/semantic colors from the design system (Shiki theme tuned
+     to the palette, or a CSS pass — dark + light both legible).
 
-## Phase 1 — Typographic + token foundation
+3. **SEO / structured data:**
+   - Per-post `<title>` / description from frontmatter; canonical; OG/Twitter (extend the
+     `Layout` props; add `ogImage` support, fall back to the site default).
+   - **Article / BlogPosting JSON-LD** per post: `headline`, `datePublished`,
+     `dateModified` (= updatedDate ?? pubDate), `author` → the existing Person `@id`,
+     `publisher` → the Organization `@id`, `mainEntityOfPage`. Reuse the identifiers already
+     in `Layout.astro`.
+   - Confirm posts land in the **sitemap** (should happen automatically via
+     `getStaticPaths` + the existing sitemap integration).
+   - **RSS feed** at `/rss.xml` via `@astrojs/rss` (`npm i @astrojs/rss`) — builders read
+     RSS. Include title/description/pubDate/link; exclude drafts.
+   - Update `public/llms.txt` to mention the blog + RSS feed.
 
-The highest-leverage, lowest-risk change. Swaps the type system and wires tokens; this
-alone transforms the look.
+4. **Discoverability:**
+   - Add `~/blog` to the **footer file-tree** menu, consistent with `~/contact` / `~/privacy`.
+   - A header `/blog` link is optional — but the homepage's one job stays the signup, so
+     **don't restructure the header without checking with Mike first.**
 
-1. **Fonts — self-host all three, drop the CDN.**
-   - Remove the Google Fonts **Inter** stylesheet `<link>` and its `fonts.googleapis.com`
-     / `fonts.gstatic.com` preconnects in `src/layouts/Layout.astro` (~lines 143–150).
-   - Add self-hosted `woff2` under `public/fonts/`:
-     **Satoshi** (400/500/700/900), **Sentient** (400/500 + 400 italic),
-     **Commit Mono** (400/700 + 400 italic).
-     Sources: Satoshi & Sentient → Fontshare (fontshare.com); Commit Mono → commitmono.com.
-   - Add `@font-face` blocks in `global.css` with `font-display: swap`. `<link rel="preload">`
-     the two most critical faces (Satoshi 700/900 for the hero H1, Sentient 400 for body).
-   - *Fallback if self-hosting is blocked:* keep the existing **Fontshare** CDN link for
-     Satoshi + add Sentient to it (`f[]=sentient@...`), and self-host only Commit Mono.
-     Self-hosting all three is the target; note in the log if you fall back.
+5. **Seed post (placeholder only — for testing, not content):**
+   - Create ONE minimal post (`src/content/blog/hello-world.md`, `draft: true`) purely to
+     validate the collection, routes, and styling. Keep it a short technical stub. **Do NOT
+     write marketing/voice content** — the real first post (the WordPress→repo story) is
+     drafted in Mike's voice by the command center and will drop in later.
 
-2. **Font tokens** (`global.css`, `@theme inline`, ~lines 37–38):
-   - `--font-heading` → keep Satoshi.
-   - `--font-body` → `"Sentient", Georgia, "Times New Roman", serif` (was Inter).
-   - Add `--font-mono` → `"Commit Mono", ui-monospace, "SFMono-Regular", monospace` and
-     expose it to Tailwind (so the `font-mono` utility works).
+## Acceptance
 
-3. **Radii — sharpen** (the one deliberate change from today's CSS):
-   - Add tokens `--radius: 3px` and `--radius-window: 6px`.
-   - Replace the current rounded values with `--radius`: fields `border-radius: 0.5rem`
-     (global.css ~309), `.form-status` `0.6rem` (~274), and the `rounded-*` utilities in
-     components. Reserve `--radius-window` for any intentional terminal/window chrome only.
-
-4. **Apply the type roles** — *serif = read, sans = state, mono = operate*:
-   - Mono (`font-mono`, uppercase + tracking for labels): kickers/eyebrows, section labels,
-     nav items, buttons/CTA label, badges, stats/numbers.
-   - Concretely: `index.astro` kicker "Mike Wilson Digital" (line 14) → `font-mono`;
-     the CTA button label in `SignupForm.astro` → `font-mono`; nav links in `Header.astro`
-     → `font-mono`. Body/`.prose` inherits Sentient from `body`. Headings stay Satoshi.
-   - `.prose` (global.css ~193): now serif — bump `font-size` to ~1.0625–1.125rem and keep
-     line-height ~1.7 for comfortable serif reading.
-
-5. **Do not recolor.** Keep the existing dark/light tokens. Optional: add an `--info`
-   token for in-code links per the brief. `::selection` already exists — leave it.
-
-**Acceptance (P1):** `npm run build` clean; headings render Satoshi, body Sentient
-(serif), labels/nav/buttons Commit Mono; corners sharpened; dark **and** light both
-correct; AA contrast holds (confirm every `#dd3300` use is CTA/large text, not small
-body). Screenshot home + contact for Mike. **Stop. Commit only after Mike's OK.**
-
----
-
-## Phase 2 — De-generic layout pass
-
-Work the brief's §2 table, page by page: `index`, `links`, `contact`, `privacy`, and
-`Header` / `Footer` / `SignupForm`.
-
-- Replace card-on-card / bordered boxes with **hairline rules + whitespace**; a card must
-  earn itself.
-- **Left-align and introduce asymmetry.** Stop centering everything — the homepage hero is
-  currently a centered `max-w-2xl`; propose a left-aligned, editorial hero.
-- Sharp radii throughout (from P1).
-- Craft details: sharp **orange focus rings** as a feature, considered hover states on
-  every interactive element, `tabular-nums` on numbers, a tuned dark-mode scrollbar.
-- **Remove the radial hero glow AND the headline gradient** (Mike, final 2026-08-07):
-  delete the sitewide **radial orange hero glow** (`Layout.astro` ~169–177). Replace the
-  animated-gradient treatment on the accent word ("AI-first") with a **solid accent-orange**
-  color (`var(--primary)` / `#f97316`): drop the `.text-gradient-animated` span usage and
-  remove its CSS (`.text-gradient-animated`, `@keyframes gradient-pan`, and the
-  `[data-theme="light"] .text-gradient-animated` override) from `index.astro` /
-  `global.css`. No gradient, no animation on the headline. Clean up anything orphaned.
-
-**Acceptance (P2):** no nested card stacks; layouts left-aligned/asymmetric where
-sensible; focus/hover/selection polished; build clean; per-page screenshots for Mike.
-**Stop. Commit only after Mike's OK.**
-
----
-
-## Phase 3 — Developer-native signature (restrained)
-
-Add the signature layer per brief §6, honoring the §7 guardrails: **no** fake-terminal
-hero, **no** typewriter H1, **no** glow/matrix/glitch, **no** mono on body prose.
-
-- **Sitewide background texture** — a faint dot-grid (option B, Mike-approved 2026-08-07),
-  tokenized per theme. Dark: `radial-gradient(circle, rgba(148,163,184,0.075) 1px, transparent 1.2px)`
-  with `background-size: 30px 30px`; light: `rgba(71,85,105,0.10)` at the same size. Apply
-  as one `background-image` on the page container (or `body`), behind a solid content
-  layer; no image asset. Keep it subtler than the mockup at full-bleed. (This is the only
-  sanctioned background treatment — no decorative images/gradients, per brief §7.)
-- **Animated opt-in border** (Mike-approved 2026-08-07, option #1 *always-on subtle*) on
-  the `SignupForm.astro` combined pill — **button stays inside** the border, matching the
-  current pill. Replace the pill's current static border + `:focus-within` box-shadow (the
-  `.signup-pill` sm+ rules) with a continuously-animated conic-gradient ring on a ~1.5px
-  border wrapper: an animated `@property --a` angle driving
-  `conic-gradient(from var(--a), rgba(221,51,0,0.16) 0 235deg, #ff5a2a 300deg, rgba(221,51,0,0.16) 350deg)`
-  with `animation: spin 5.5s linear infinite` (`@keyframes spin { to { --a: 360deg } }`) —
-  a mostly-dim ring with one bright arc drifting slowly. On mobile (stacked) apply the same
-  ring to the input. Freeze to a static `--cta` (or `rgba(221,51,0,0.6)`) ring under
-  `prefers-reduced-motion`. Pure CSS — no JS, no asset. Homepage field only. **Keep the
-  tempo (~5.5s) slow and desynced from the headline gradient pan (~5s)** so the two hero
-  motions don't compete.
-- **Distinct headline accent in both themes** (Mike, 2026-08-07 — folded in from the Phase 2
-  review): the hero accent word ("AI-first") currently uses `text-primary`, which collapses
-  to the CTA color `#dd3300` in light mode. Give it a **dedicated accent token** so it stays
-  a distinct accent orange in *both* themes and never equals the CTA — dark `#f97316`
-  (unchanged), light `#ea580c` (a distinct orange; verify it clears AA large-text ~3:1 on
-  `#f8fafc`, nudge slightly deeper only if needed, but **not** `#dd3300`). Add the token to
-  both `[data-theme]` blocks + a `--color-*` mapping in `@theme inline`, and swap the span's
-  class from `text-primary` to the new one. `#dd3300` stays CTA-only.
-- Mono kickers with prompt/path glyphs (`~$`, `//`, `>`) used consistently as a language.
-- Footer: a file-tree / path-style sitemap motif.
-- Code-as-content where the page teaches the method — real, copyable snippets with syntax
-  colors from the semantic set.
-- Astro **View Transitions** for navigation; keep the theme cross-fade; subtle,
-  reduced-motion-safe micro-interactions.
-- View-source hygiene: semantic landmarks, tidy markup; optional tasteful console easter egg.
-
-**Acceptance (P3):** signature reads as builder-made, not costume; guardrails respected;
-Lighthouse 95+; keyboard nav, reduced-motion, and form labels intact; build clean.
-**Stop. Commit only after Mike's OK.**
-
----
+- `npm run build` clean; `/blog`, a `/blog/<slug>` post, and `/rss.xml` all generate.
+- Post page renders in `.prose`: Sentient serif body, Satoshi headings, Commit Mono code
+  on a hairline surface, left-aligned, dot-grid behind. `/blog` index is a hairline list,
+  not cards. Dark **and** light both correct; AA holds.
+- Article JSON-LD present + valid on a post; the post appears in the sitemap; `/rss.xml`
+  validates. Drafts are excluded from the index, sitemap, and RSS in a production build.
+- Existing pages (home / contact / links / privacy) unchanged except the footer `~/blog`
+  addition. Analytics / anti-flash script / theme toggle / View Transitions untouched.
 
 ## Commit & log
 
-- **Check with Mike before EVERY commit? yes.** Commit + push per phase (separate commit
-  each), only after his OK.
-- Append a dated entry to `tasks/log.md` (newest at top) per phase when done: what changed,
-  which files, and anything the command center should know.
+- This is additive and self-testable. Build it, **self-verify the acceptance checklist**
+  (`npm run build` + eyeball the routes in dark + light), then **commit + push** (one
+  commit, or logically grouped). **Flag before touching the header nav**; the footer
+  `~/blog` addition is fine to include.
+- Append a dated entry to `tasks/log.md` (newest at top): what you built, files touched,
+  and anything the command center should know.

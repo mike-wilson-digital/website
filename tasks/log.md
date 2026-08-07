@@ -6,6 +6,24 @@ is completed or blocked.
 
 ---
 
+## 2026-08-07 — Design retrofit, Phase 1 (type + token foundation)
+
+Applied the three-voice type system from `docs/design-principles.md`. Self-hosted all three
+faces (dropped the Google/Fontshare CDN): 8 `@font-face` blocks over `/fonts/*.woff2` (Satoshi
+400/500/700/900, Sentient 400/400-italic/500, Commit Mono VF), `font-display: swap`; preload
+Satoshi 900 + Sentient 400. Font tokens: `--font-heading: Satoshi`, `--font-body: Sentient`
+(serif), added `--font-mono: Commit Mono`. Type roles applied — Satoshi headings, Sentient
+serif prose, Commit Mono on kickers/labels/inputs/CTA buttons/footer (incl. the contact
+`Send` button). Radii sharpened: `--radius: 3px` (+ `--radius-window: 6px` token), so the
+signup pill and all inputs/buttons are crisp; `/links` avatar circle preserved. No recolor —
+same slate+orange palette; added an unused `--info` token per the doc. Left untouched:
+GTM/GA4, SEO/meta, JSON-LD, sitemap, anti-flash theme script, light/dark toggle + cross-fade.
+Gradient headline + hero glow intentionally deferred to Phase 2. Build clean (4 pages);
+verified home + contact in dark and light. Committed + pushed as its own commit.
+
+Note: `docs/design-principles.md` and `tasks/next.md` also carry the command-center's
+approved Phase 3 dot-grid spec — left uncommitted here; belongs with the Phase 3 work.
+
 ## 2026-08-06 — Enlarge header logo
 
 Bumped the header wordmark from `h-7` to `h-8 sm:h-9` (32px mobile / 36px desktop) on both

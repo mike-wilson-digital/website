@@ -13,6 +13,65 @@
 /* Attribute-based theming: `dark:` variant keys off [data-theme="dark"]. */
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
+/* --- Self-hosted fonts (no CDN), font-display: swap for FOUT --------
+   Satoshi = display/headings, Sentient = body serif, Commit Mono = UI/code. */
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/satoshi-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/satoshi-500.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/satoshi-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/satoshi-900.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Sentient';
+  src: url('/fonts/sentient-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Sentient';
+  src: url('/fonts/sentient-400-italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Sentient';
+  src: url('/fonts/sentient-500.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Commit Mono';
+  src: url('/fonts/commit-mono.woff2') format('woff2');
+  font-weight: 100 900; /* variable font — weight axis */
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Map runtime vars into Tailwind's theme. `inline` keeps utilities
    pointing at the var() below, so they swap with light/dark. */
 @theme inline {
@@ -33,14 +92,30 @@
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-error: var(--error);
+  --color-info: var(--info);
 
-  --font-heading: "Satoshi", "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+  /* Three-voice type system: serif = read, sans = state, mono = operate. */
+  --font-heading: "Satoshi", system-ui, sans-serif;
+  --font-body: "Sentient", Georgia, "Times New Roman", serif;
+  --font-mono: "Commit Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  /* Sharp by default (3px via --radius on :root). --radius-window (6px)
+     is reserved for intentional terminal/window chrome only. */
+  --radius-sm: var(--radius);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius);
+  --radius-xl: var(--radius);
+  --radius-2xl: var(--radius);
+  --radius-3xl: var(--radius);
 }
 
 /* Force dark form controls, scrollbars, and browser chrome by default. */
 :root {
   color-scheme: dark;
+
+  /* Sharp radii (§5). --radius-window reserved for terminal/window chrome. */
+  --radius: 3px;
+  --radius-window: 6px;
 }
 
 /* --- Dark palette (DEFAULT — <html data-theme="dark">) ------- */
@@ -70,6 +145,7 @@
   --success: #4ade80;
   --warning: #fbbf24;
   --error: #f87171;
+  --info: #58a6ff; /* in-code / info links (syntax-inspired) */
 }
 
 /* --- Light palette (kept for a future toggle; not active) ---- */
@@ -95,6 +171,7 @@
   --success: #15803d;
   --warning: #b45309;
   --error: #b91c1c;
+  --info: #0969da; /* darker blue for AA on the light paper */
 }
 
 /* --- Base ---------------------------------------------------- */
@@ -193,8 +270,8 @@
 .prose {
   max-width: 68ch;
   color: color-mix(in srgb, var(--color-text) 90%, transparent);
-  font-size: 1rem;
-  line-height: 1.75;
+  font-size: 1.125rem; /* serif reads better a touch larger */
+  line-height: 1.7;
 }
 
 .prose > * + * {
@@ -271,7 +348,7 @@
   gap: 0.6rem;
   margin-top: 1.25rem;
   padding: 0.75rem 1rem;
-  border-radius: 0.6rem;
+  border-radius: var(--radius);
   font-size: 0.9rem;
   line-height: 1.45;
   border: 1px solid transparent;
@@ -303,11 +380,12 @@
 .field input,
 .field textarea {
   width: 100%;
-  font: inherit; /* Inter, 16px */
+  font-family: var(--font-mono); /* form controls = mono */
+  font-size: 1rem;
   color: var(--text);
   background: var(--bg);
   border: 1px solid var(--field-border);
-  border-radius: 0.5rem;
+  border-radius: var(--radius);
   padding: 0.9rem 1rem;
   outline: none;
   caret-color: var(--primary);
@@ -347,6 +425,7 @@
   transform: translateY(-50%);
   padding: 0 0.35rem;
   color: var(--text-muted); /* resting label = muted */
+  font-family: var(--font-mono);
   font-size: 1rem;
   line-height: 1;
   pointer-events: none;

@@ -139,19 +139,10 @@ const jsonLd = {
 		<!-- Structured data: Person + Organization + WebSite -->
 		<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
-		<!-- Fonts — Inter (Google) for body/UI, Satoshi (Fontshare) for headings -->
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link rel="preconnect" href="https://api.fontshare.com" />
-		<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
-		<link
-			rel="stylesheet"
-			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-		/>
-		<link
-			rel="stylesheet"
-			href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap"
-		/>
+		<!-- Fonts — self-hosted (Satoshi / Sentient / Commit Mono); @font-face in global.css.
+		     Preload the two most critical faces: Satoshi 900 (hero H1) + Sentient 400 (body). -->
+		<link rel="preload" href="/fonts/satoshi-900.woff2" as="font" type="font/woff2" crossorigin />
+		<link rel="preload" href="/fonts/sentient-400.woff2" as="font" type="font/woff2" crossorigin />
 
 		<title>{title}</title>
 	</head>

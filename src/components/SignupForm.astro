@@ -22,7 +22,7 @@ const { class: className = '' } = Astro.props;
 		<button
 			id="signup-btn"
 			type="submit"
-			class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-cta px-6 py-3 font-semibold text-white shadow-lg shadow-cta/20 transition hover:bg-cta-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:rounded-full sm:shadow-none"
+			class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-cta px-6 py-3 font-mono text-sm font-medium uppercase tracking-wide text-white shadow-lg shadow-cta/20 transition hover:bg-cta-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:shadow-none"
 		>
 			<span data-label>Get early access</span>
 		</button>
@@ -51,11 +51,12 @@ const { class: className = '' } = Astro.props;
 
 	.signup-pill input {
 		width: 100%;
-		font: inherit; /* Inter, 16px */
+		font-family: var(--font-mono); /* form controls = mono */
+		font-size: 1rem;
 		color: var(--text);
 		background: var(--bg);
 		border: 1px solid var(--field-border);
-		border-radius: 0.5rem;
+		border-radius: var(--radius);
 		padding: 0.9rem 1rem;
 		outline: none;
 		caret-color: var(--primary);
@@ -82,8 +83,8 @@ const { class: className = '' } = Astro.props;
 			gap: 0.5rem;
 			background: var(--bg);
 			border: 1px solid var(--field-border);
-			border-radius: 9999px;
-			padding: 0.4rem 0.4rem 0.4rem 1.5rem;
+			border-radius: var(--radius);
+			padding: 0.4rem 0.4rem 0.4rem 1rem;
 			transition:
 				border-color 0.15s ease,
 				box-shadow 0.15s ease;

@@ -12,6 +12,11 @@ AI-first workflow (Astro + Cloudflare + AI), in the open.
 ## Key pages
 
 - Home (email signup): https://www.mikewilson.digital/
+- Blog (build-in-public notes): https://www.mikewilson.digital/blog
 - Links (socials + signup): https://www.mikewilson.digital/links
 - Contact: https://www.mikewilson.digital/contact
 - Privacy Policy: https://www.mikewilson.digital/privacy
+
+## Feeds
+
+- RSS: https://www.mikewilson.digital/rss.xml

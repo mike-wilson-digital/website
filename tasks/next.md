@@ -1,5 +1,10 @@
 # Next task — Blog engine (the build-in-public spine)
 
+> ✅ **DONE 2026-08-07** — blog engine shipped (collection, `/blog` + `/blog/[slug]`,
+> `/rss.xml`, BlogPosting JSON-LD, dual-theme code, footer `~/blog`, seed draft). Ships with
+> **zero published posts** until the first non-draft post lands. See `tasks/log.md`. No active
+> task — command center to queue the next one (e.g. the real WordPress→repo post).
+
 **Goal:** stand up a repo-first blog so the weekly build-in-public post has a home.
 Content = Markdown/MDX files in the repo (the AI is the CMS). The blog must look like it
 belongs to the site, not bolted on — it inherits the existing design system, not a new one.

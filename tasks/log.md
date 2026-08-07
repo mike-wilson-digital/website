@@ -6,6 +6,44 @@ is completed or blocked.
 
 ---
 
+## 2026-08-07 — Blog engine (build-in-public spine)
+
+Stood up a repo-first blog on the existing design system (no restyle, no new fonts/colors).
+
+- **Deps:** added `@astrojs/rss` + `@astrojs/mdx`; `astro.config.mjs` now registers `mdx()`
+  and dual-theme Shiki (`github-light`/`github-dark`, `defaultColor:false`, `wrap`).
+- **Collection:** `src/content.config.ts` — `blog` glob loader (`**/*.{md,mdx}`), Zod schema
+  (title, description, pubDate, updatedDate?, draft=false, tags?, ogImage?); slug = filename.
+- **Routes:** `/blog` index = hairline-ruled list (mono tabular pubDate + Satoshi title +
+  mono tags, `border-b` rows, left spine) like `/links`; `/blog/[...slug]` via
+  `getStaticPaths` — mono `~/blog` back-kicker, Satoshi H1, mono meta line (pubDate, updated?,
+  reading time from body, tags), `<article class="prose">`.
+- **Code:** `.astro-code` styled to `--surface` + hairline + `--radius` + Commit Mono; Shiki
+  fg mapped per `[data-theme]` (bg stays surface); inline-code chip + blockquote rule added
+  to `.prose`. Dark + light both legible.
+- **SEO:** per-post title/description/canonical/OG (reuses Layout's `image` prop for
+  `ogImage`); new optional `article` prop on `Layout` adds **BlogPosting JSON-LD** reusing the
+  Person/Org `@id`s (author/publisher/mainEntityOfPage/dates/image — validated). Posts auto-
+  land in the sitemap. **RSS** at `/rss.xml` via `@astrojs/rss`. `public/llms.txt` now lists
+  the blog + RSS.
+- **Drafts:** excluded from index/RSS/sitemap in prod (`import.meta.env.PROD` filter);
+  previewable in dev; draft post pages carry `noindex`.
+- **Footer:** added `~/blog` to the file-tree (header nav left untouched per the spec).
+- **Seed:** `src/content/blog/hello-world.md` (`draft: true`) — minimal technical stub only,
+  no voice/marketing content (the real WordPress→repo post drops in later via the command
+  center).
+- **Fix caught in review:** date-only frontmatter parsed as UTC midnight showed a day early
+  in local tz — both formatters now use `timeZone: 'UTC'`.
+
+Verified: `npm run build` clean (5 pages); with the seed temporarily flipped to `draft:false`
+the post page, index listing, RSS item, sitemap entry, and BlogPosting JSON-LD all generate,
+and code renders correctly in dark + light; reverted to `draft:true` so nothing publishes yet.
+Command-center note: **the blog ships with zero published posts** — `/blog` shows an empty
+state and `/rss.xml` is empty until the first real (non-draft) post lands. Files: new
+`content.config.ts`, `src/content/blog/hello-world.md`, `src/pages/blog/index.astro`,
+`src/pages/blog/[...slug].astro`, `src/pages/rss.xml.js`; edited `astro.config.mjs`,
+`Layout.astro`, `Footer.astro`, `global.css`, `public/llms.txt`, `package.json`.
+
 ## 2026-08-07 — Fix: distinct headline-accent token (Phase 3 follow-up)
 
 Caught a missed Phase 3 requirement the command center folded into `next.md` at `2b57274`

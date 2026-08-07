@@ -16,6 +16,15 @@ interface Props {
 	noindex?: boolean;
 	header?: boolean;
 	footer?: boolean;
+	/** When set, adds a BlogPosting node to the JSON-LD graph (blog posts). */
+	article?: {
+		title: string;
+		description: string;
+		/** ISO date string. */
+		datePublished: string;
+		/** ISO date string (defaults to datePublished). */
+		dateModified?: string;
+	};
 }
 
 const {
@@ -27,6 +36,7 @@ const {
 	noindex = false,
 	header = true,
 	footer = true,
+	article,
 } = Astro.props;
 
 // Commit SHA of this build (set by Cloudflare Pages). Used by the
@@ -72,6 +82,23 @@ const jsonLd = {
 			name: 'Mike Wilson Digital',
 			url: origin,
 		},
+		...(article
+			? [
+					{
+						'@type': 'BlogPosting',
+						'@id': `${canonicalURL}#article`,
+						headline: article.title,
+						description: article.description,
+						datePublished: article.datePublished,
+						dateModified: article.dateModified ?? article.datePublished,
+						author: { '@id': `${origin}/#person` },
+						publisher: { '@id': `${origin}/#organization` },
+						mainEntityOfPage: canonicalURL,
+						url: canonicalURL,
+						image: ogImageURL,
+					},
+				]
+			: []),
 	],
 };
 ---

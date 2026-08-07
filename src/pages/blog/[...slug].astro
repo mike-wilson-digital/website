@@ -1,0 +1,92 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+	// Drafts get a route in dev (previewable) but not in a production build.
+	const posts = await getCollection('blog', ({ data }) =>
+		import.meta.env.PROD ? !data.draft : true
+	);
+	return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+// Reading time from the raw body (~200 wpm).
+const words = post.body?.split(/\s+/).filter(Boolean).length ?? 0;
+const readingTime = Math.max(1, Math.round(words / 200));
+
+// Format in UTC so a date-only frontmatter value (parsed as UTC midnight)
+// doesn't shift a day in the build machine's local timezone.
+const fmtDate = (d: Date) =>
+	d.toLocaleDateString('en-US', {
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric',
+		timeZone: 'UTC',
+	});
+const { title, description, pubDate, updatedDate, tags, ogImage, draft } = post.data;
+---
+
+<Layout
+	title={`${title} — Mike Wilson Digital`}
+	description={description}
+	image={ogImage}
+	noindex={draft}
+	article={{
+		title,
+		description,
+		datePublished: pubDate.toISOString(),
+		dateModified: (updatedDate ?? pubDate).toISOString(),
+	}}
+>
+	<main class="mx-auto w-full max-w-5xl flex-1 px-6 py-16">
+		<div class="max-w-2xl">
+			<p class="font-mono text-xs font-medium uppercase tracking-[0.2em] text-text-muted">
+				<a
+					href="/blog/"
+					class="rounded-sm transition-colors hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+				>
+					<span class="text-primary/70">~/</span>blog
+				</a>
+			</p>
+
+			<h1
+				class="mt-5 font-heading text-4xl font-black leading-[1.1] tracking-tight text-text sm:text-5xl"
+			>
+				{title}
+			</h1>
+
+			<p class="mt-4 font-mono text-xs text-text-muted">
+				<time datetime={pubDate.toISOString()}>{fmtDate(pubDate)}</time>
+				{
+					updatedDate && (
+						<>
+							<span class="mx-1.5 text-text-muted/50" aria-hidden="true">
+								·
+							</span>
+							updated <time datetime={updatedDate.toISOString()}>{fmtDate(updatedDate)}</time>
+						</>
+					)
+				}
+				<span class="mx-1.5 text-text-muted/50" aria-hidden="true">·</span>
+				{readingTime} min read
+				{
+					tags && tags.length > 0 && (
+						<>
+							<span class="mx-1.5 text-text-muted/50" aria-hidden="true">
+								·
+							</span>
+							{tags.map((t) => `#${t}`).join(' ')}
+						</>
+					)
+				}
+			</p>
+
+			<article class="prose mt-10">
+				<Content />
+			</article>
+		</div>
+	</main>
+</Layout>

@@ -6,6 +6,17 @@ is completed or blocked.
 
 ---
 
+## 2026-08-07 — Fix: distinct headline-accent token (Phase 3 follow-up)
+
+Caught a missed Phase 3 requirement the command center folded into `next.md` at `2b57274`
+*after* I'd planned the phase (I didn't re-read it — my miss). The hero accent word was still
+on `text-primary`, which collapses to the CTA `#dd3300` in light. Added a dedicated
+`--headline-accent` token (dark `#f97316`, light `#ea580c`) + `--color-headline-accent`
+mapping in `global.css`, and swapped the "AI-first" span to `text-headline-accent`. Now
+distinct from the CTA in both themes; light `#ea580c` on `#f8fafc` measures ~3.4:1 (clears AA
+large-text). `#dd3300` stays CTA-only. Build clean; verified dark + light. Files:
+`global.css`, `index.astro`.
+
 ## 2026-08-07 — Design retrofit, Phase 3 (developer-native signature)
 
 Added the signature layer per brief §6, honoring the §7 guardrails. **Dot-grid background**:

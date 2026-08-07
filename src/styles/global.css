@@ -85,6 +85,7 @@
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
   --color-primary-soft: var(--primary-soft);
+  --color-headline-accent: var(--headline-accent);
 
   --color-cta: var(--cta);
   --color-cta-hover: var(--cta-hover);
@@ -138,6 +139,10 @@
   --primary-hover: #ea580c;
   --primary-soft: #3a1d12;
 
+  /* Hero accent word ("AI-first") — a dedicated token kept distinct from --cta
+     in BOTH themes so the two oranges never collide. Not --primary (flips to CTA). */
+  --headline-accent: #f97316;
+
   /* Signature CTA orange — same in both themes for consistency */
   --cta: #dd3300;
   --cta-hover: #c2410c;
@@ -166,6 +171,10 @@
   --primary: #dd3300;
   --primary-hover: #c2410c;
   --primary-soft: #fff1e8;
+
+  /* Distinct accent orange for the hero word — clears AA large-text (~3.4:1)
+     on the #f8fafc paper, and stays distinct from the CTA #dd3300. */
+  --headline-accent: #ea580c;
 
   /* Signature CTA orange — same in both themes for consistency */
   --cta: #dd3300;

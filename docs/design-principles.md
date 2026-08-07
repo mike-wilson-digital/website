@@ -155,6 +155,14 @@ reads as a language, not a sticker.
 
 Draw from the developer world, but treat each as a deliberate, sparing move:
 
+- **Background: a faint dot-grid** (sitewide — the monospace grid concept made visible,
+  and the *only* sanctioned background treatment). Chosen spec (option B, approved
+  2026-08-07): dark `radial-gradient(circle, rgba(148,163,184,0.075) 1px, transparent 1.2px)`
+  at `background-size: 30px 30px`; light `rgba(71,85,105,0.10)` at the same size. One
+  `background-image` on the page container, tokenized so it flips with the theme, behind a
+  solid content layer. No image asset. Err *subtler* at full-bleed than the mockup reads.
+  This is structural texture from the medium — not a decorative background image (those
+  stay out, per §7).
 - **Prompt / path glyphs** (`~$`, `>`, `//`, `mike@digital:~$`) as label prefixes.
 - **File-tree / path** styling for nav or a sitemap-style footer.
 - **Diff coloring** (`+` green / `-` orange-red) — only where it *means* add/remove.
@@ -206,9 +214,19 @@ These are part of the design, not an afterthought. Builders check them.
 
 ## 9. Component notes (quick specs for what CC will build)
 
-- **Primary CTA** (the email signup — the homepage's one job): solid `--accent` fill,
+- **Primary CTA** (the email signup — the homepage's one job): solid `--cta` fill,
   `--radius`, mono uppercase label, maybe a `>` or `~$` prefix. One primary CTA per view;
   everything else is quieter. This button should be the loudest thing on the page.
+- **Signup field — animated border** (approved 2026-08-07, option #1 *always-on subtle*):
+  the combined signup *pill* (input + inline button, per `SignupForm.astro`) gets a slow
+  orange conic-gradient ring — a mostly-dim ring with one brighter arc drifting around
+  (~5.5s), running continuously. The button stays *inside* the ring. Homepage field only;
+  freezes to a static orange ring under `prefers-reduced-motion`. Exact CSS in the Phase 3
+  spec.
+- **Hero headline accent** (final 2026-08-07): the accent word ("AI-first") is a **solid
+  accent orange** (`--primary` / `#f97316`) — no gradient, no animation. Clean and legible;
+  this keeps the hero's *only* motion the opt-in border. `#dd3300` stays reserved for the
+  CTA button so the two oranges don't compete.
 - **Links:** underline on hover with an offset; in-prose links can borrow `--info`. Nav
   links are mono, muted, orange on active/hover.
 - **Buttons/secondary:** ghost/outline with hairline border; no gradients, no shadows.

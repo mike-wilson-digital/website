@@ -77,13 +77,13 @@ Work the brief's §2 table, page by page: `index`, `links`, `contact`, `privacy`
 - Sharp radii throughout (from P1).
 - Craft details: sharp **orange focus rings** as a feature, considered hover states on
   every interactive element, `tabular-nums` on numbers, a tuned dark-mode scrollbar.
-- **Remove the decorative elements** (Mike approved 2026-08-07 — do this, don't ask):
-  delete the sitewide **radial orange hero glow** (`Layout.astro` ~169–177) and the
-  **animated-gradient headline** (`index.astro` `.text-gradient-animated` span, plus the
-  `.text-gradient-animated` + `@keyframes gradient-pan` rules and the light-mode override
-  in `global.css`). Replace the headline with solid Satoshi; a single word may take the
-  CTA orange (`--cta`) for emphasis if it still clears AA. No glow, no gradient text — per
-  the brief's §7 guardrails. Clean up anything left orphaned by the removal.
+- **Remove the radial hero glow AND the headline gradient** (Mike, final 2026-08-07):
+  delete the sitewide **radial orange hero glow** (`Layout.astro` ~169–177). Replace the
+  animated-gradient treatment on the accent word ("AI-first") with a **solid accent-orange**
+  color (`var(--primary)` / `#f97316`): drop the `.text-gradient-animated` span usage and
+  remove its CSS (`.text-gradient-animated`, `@keyframes gradient-pan`, and the
+  `[data-theme="light"] .text-gradient-animated` override) from `index.astro` /
+  `global.css`. No gradient, no animation on the headline. Clean up anything orphaned.
 
 **Acceptance (P2):** no nested card stacks; layouts left-aligned/asymmetric where
 sensible; focus/hover/selection polished; build clean; per-page screenshots for Mike.
@@ -96,6 +96,24 @@ sensible; focus/hover/selection polished; build clean; per-page screenshots for 
 Add the signature layer per brief §6, honoring the §7 guardrails: **no** fake-terminal
 hero, **no** typewriter H1, **no** glow/matrix/glitch, **no** mono on body prose.
 
+- **Sitewide background texture** — a faint dot-grid (option B, Mike-approved 2026-08-07),
+  tokenized per theme. Dark: `radial-gradient(circle, rgba(148,163,184,0.075) 1px, transparent 1.2px)`
+  with `background-size: 30px 30px`; light: `rgba(71,85,105,0.10)` at the same size. Apply
+  as one `background-image` on the page container (or `body`), behind a solid content
+  layer; no image asset. Keep it subtler than the mockup at full-bleed. (This is the only
+  sanctioned background treatment — no decorative images/gradients, per brief §7.)
+- **Animated opt-in border** (Mike-approved 2026-08-07, option #1 *always-on subtle*) on
+  the `SignupForm.astro` combined pill — **button stays inside** the border, matching the
+  current pill. Replace the pill's current static border + `:focus-within` box-shadow (the
+  `.signup-pill` sm+ rules) with a continuously-animated conic-gradient ring on a ~1.5px
+  border wrapper: an animated `@property --a` angle driving
+  `conic-gradient(from var(--a), rgba(221,51,0,0.16) 0 235deg, #ff5a2a 300deg, rgba(221,51,0,0.16) 350deg)`
+  with `animation: spin 5.5s linear infinite` (`@keyframes spin { to { --a: 360deg } }`) —
+  a mostly-dim ring with one bright arc drifting slowly. On mobile (stacked) apply the same
+  ring to the input. Freeze to a static `--cta` (or `rgba(221,51,0,0.6)`) ring under
+  `prefers-reduced-motion`. Pure CSS — no JS, no asset. Homepage field only. **Keep the
+  tempo (~5.5s) slow and desynced from the headline gradient pan (~5s)** so the two hero
+  motions don't compete.
 - Mono kickers with prompt/path glyphs (`~$`, `//`, `>`) used consistently as a language.
 - Footer: a file-tree / path-style sitemap motif.
 - Code-as-content where the page teaches the method — real, copyable snippets with syntax

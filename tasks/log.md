@@ -6,6 +6,35 @@ is completed or blocked.
 
 ---
 
+## 2026-08-07 — Design retrofit, Phase 2 (de-generic layout pass)
+
+Worked the brief's §2 anti-generic table page by page. **Homepage hero → left-aligned
+editorial**: kicker/headline/serif subhead/signup/secondary link all flush-left in a
+`max-w-3xl` block within the `max-w-5xl` column, sharing the header's left edge (was a
+centered `max-w-2xl`). **Removed the headline gradient** — "AI-first" is now solid
+`text-primary` (`#f97316` dark / `#dd3300` light); deleted `.text-gradient-animated`,
+`@keyframes gradient-pan`, and the light override from `global.css`. **Removed the sitewide
+radial hero glow** (`Layout.astro`). **Contact de-carded**: dropped the `rounded-2xl`
+bordered/blurred box → heading + serif intro, a hairline rule, fields on the page; aligned
+to the left spine (`max-w-5xl` main + inner `max-w-xl`). **Links**: six filled cards →
+hairline-ruled menu (icon + mono label + arrow, 1px rules, orange hover); avatar circle
+preserved. **Privacy** aligned to the same left edge. **Craft**: token-driven scrollbar
+(both themes), `tabular-nums` on body, footer hairline separator, sharp orange focus rings
+kept. **Logo/content alignment fix**: the logo SVG has ~8% dead space on its left (ink
+starts at x=205 of the 2516 viewBox), so the mark sat ~9–10px inboard of the text; added a
+`-9px`/`-10px` negative margin on the logo link (scaled to h-8/h-9) — now aligned to 0.25px.
+
+Files: `index.astro`, `contact.astro`, `privacy.astro`, `links.astro`, `Layout.astro`,
+`Header.astro`, `Footer.astro`, `SignupForm.astro`, `global.css`. No recolor; GTM/SEO/
+JSON-LD/sitemap/anti-flash script/toggle+cross-fade untouched. Build clean (4 pages);
+verified all pages in dark + light. Committed + pushed as its own commit.
+
+Command-center note: light-mode "AI-first" resolves to `#dd3300` (same hue as the CTA) because
+`#f97316` fails AA on the light paper; left as-is (colored word vs filled button don't
+compete). One-line flip to `#ea580c` if we ever want them visibly distinct in light.
+Phase 3 (dot-grid bg, animated signup border, prompt glyphs, file-tree footer, View
+Transitions) still pending — held for Mike's go.
+
 ## 2026-08-07 — Design retrofit, Phase 1 (type + token foundation)
 
 Applied the three-voice type system from `docs/design-principles.md`. Self-hosted all three

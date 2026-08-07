@@ -184,6 +184,7 @@
     background-color: var(--color-bg);
     color: var(--color-text);
     font-family: var(--font-body);
+    font-variant-numeric: tabular-nums;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
@@ -218,52 +219,31 @@
   }
 }
 
-/* --- Animated brand gradient text (reusable) ----------------- */
-.text-gradient-animated {
-  background-image: linear-gradient(
-    90deg,
-    #ffe8da 0%,
-    #ffc9a8 25%,
-    #f08a4b 50%,
-    #ffc9a8 75%,
-    #ffe8da 100%
-  );
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  animation: gradient-pan 5s ease-in-out infinite;
+/* --- Craft details (§8): tuned scrollbar + tabular figures ----
+   Token-driven so both flip with the theme. The scrollbar reads as a
+   considered dark-mode detail rather than the OS default. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
 }
 
-@keyframes gradient-pan {
-  0%,
-  100% {
-    background-position: 0% center;
-  }
-  50% {
-    background-position: 100% center;
-  }
+::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
 }
 
-/* Respect users who prefer reduced motion — keep the gradient, drop the pan */
-@media (prefers-reduced-motion: reduce) {
-  .text-gradient-animated {
-    animation: none;
-  }
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-/* Light mode: deeper-orange stops so the headline stays legible on a light bg
-   (the peach stops used on dark would wash out on white). */
-[data-theme="light"] .text-gradient-animated {
-  background-image: linear-gradient(
-    90deg,
-    #dd3300 0%,
-    #ea580c 25%,
-    #c2410c 50%,
-    #ea580c 75%,
-    #dd3300 100%
-  );
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border: 2px solid var(--bg);
+  border-radius: var(--radius);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
 }
 
 /* --- Prose: readable long-form content (reusable) ------------ */

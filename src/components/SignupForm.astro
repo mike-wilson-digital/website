@@ -84,7 +84,7 @@ const { class: className = '' } = Astro.props;
 		border-radius: var(--radius);
 		/* Mobile (stacked): the ring lives on the input itself. */
 		background:
-			linear-gradient(var(--bg), var(--bg)) padding-box,
+			linear-gradient(var(--field-fill), var(--field-fill)) padding-box,
 			var(--ring) border-box;
 		animation: signup-ring-spin 5.5s linear infinite;
 		padding: 0.9rem 1rem;
@@ -110,7 +110,7 @@ const { class: className = '' } = Astro.props;
 			border: 1.5px solid transparent;
 			border-radius: var(--radius);
 			background:
-				linear-gradient(var(--bg), var(--bg)) padding-box,
+				linear-gradient(var(--field-fill), var(--field-fill)) padding-box,
 				var(--ring) border-box;
 			animation: signup-ring-spin 5.5s linear infinite;
 			padding: 0.4rem 0.4rem 0.4rem 1rem;
@@ -147,7 +147,7 @@ const { class: className = '' } = Astro.props;
 
 		.signup-pill input {
 			background:
-				linear-gradient(var(--bg), var(--bg)) padding-box,
+				linear-gradient(var(--field-fill), var(--field-fill)) padding-box,
 				linear-gradient(rgba(221, 51, 0, 0.6), rgba(221, 51, 0, 0.6)) border-box;
 		}
 	}
@@ -155,7 +155,7 @@ const { class: className = '' } = Astro.props;
 	@media (min-width: 640px) and (prefers-reduced-motion: reduce) {
 		.signup-pill {
 			background:
-				linear-gradient(var(--bg), var(--bg)) padding-box,
+				linear-gradient(var(--field-fill), var(--field-fill)) padding-box,
 				linear-gradient(rgba(221, 51, 0, 0.6), rgba(221, 51, 0, 0.6)) border-box;
 		}
 

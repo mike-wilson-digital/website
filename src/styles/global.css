@@ -126,6 +126,9 @@
   --bg: #0b1220;
   --surface: #111827;
   --surface-alt: #0f172a;
+  /* Form-field fill: one step lighter than --surface so inputs read as
+     inputs independent of the animated ring. Single knob for tuning. */
+  --field-fill: #171f30;
   --text: #e5e7eb;
   --text-muted: #94a3b8;
   --border: #334155;
@@ -163,6 +166,7 @@
   --bg: #f8fafc;
   --surface: #ffffff;
   --surface-alt: #eef2f6;
+  --field-fill: #ffffff;
   --text: #0f172a;
   --text-muted: #475569;
   --border: #cbd5e1;

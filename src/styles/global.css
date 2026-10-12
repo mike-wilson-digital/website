@@ -329,11 +329,53 @@
   padding-left: 1.5rem;
 }
 
+/* Numbered lists: same gutter and text edge as the bullets above. The numbers
+   use the mono voice at a reduced size so they sit in the gutter the way the
+   bullet dots do (browser ::marker keeps them on the text baseline). */
+.prose ol {
+  list-style: decimal;
+  padding-left: 1.5rem;
+}
+
+.prose ol > li::marker {
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+  font-variant-numeric: tabular-nums;
+}
+
 .prose li {
   margin-top: 0.5rem;
 }
 
 .prose li::marker {
+  color: var(--color-primary);
+}
+
+/* Figures: screenshots and images in posts. Hairline + sharp radius like every
+   other surface; mono caption with the // glyph from the site's prompt language. */
+.prose figure {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.prose img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.prose figcaption {
+  margin-top: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+.prose figcaption::before {
+  content: "// ";
   color: var(--color-primary);
 }
 

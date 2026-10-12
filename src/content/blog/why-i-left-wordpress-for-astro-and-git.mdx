@@ -1,0 +1,106 @@
+---
+title: 'Why I left WordPress for Astro and Git'
+description: 'After 18 years on WordPress I rebuilt my site on Astro, Cloudflare Pages, and Markdown in Git. Here is the stack, what broke, and why I would do it again.'
+pubDate: 2026-10-12
+draft: false
+tags: ['astro', 'cloudflare', 'wordpress', 'ai-first']
+---
+
+import Figure from '../../components/Figure.astro';
+import markdownPost from '../../assets/blog/why-i-left-wordpress-for-astro-and-git/markdown-post-in-cursor.png';
+import aiEditDiff from '../../assets/blog/why-i-left-wordpress-for-astro-and-git/ai-edit-diff.png';
+
+I spent 18 years building websites on WordPress. In August, I deleted my own.
+
+Not because WordPress is bad. We had a good run. It had just become more than I needed to run a marketing site for myself, and I wanted my content to live as plain files an AI could edit directly.
+
+So I rebuilt mikewilson.digital on Astro, with every page and post as Markdown in a Git repository, deployed on Cloudflare Pages. No plugins, no admin area, no database.
+
+Here's the stack, the one thing that actually broke, and whether I'd do it again.
+
+## What does "repo-first" actually mean?
+
+Your content lives as text files inside a code repository instead of rows in a database.
+
+There's no admin dashboard to log into. To publish a post, you add a Markdown file and push it. The site rebuilds itself and the new page is live. Your content management system (CMS) is the repository, and your edit history is the Git history.
+
+<Figure
+  src={markdownPost}
+  alt="A Markdown file open in the Cursor code editor. The top lines hold the post's settings: title, description, publish date, a draft flag, and tags. Below them are the opening paragraphs of this article."
+  caption="This post, as it lives in the repo: a text file with a few lines of settings on top."
+/>
+
+That sounds like a step backward until you add an AI to it. Then it becomes the entire point.
+
+## What's in the stack?
+
+- **Astro** builds the site. It outputs static HTML and ships almost no JavaScript, so pages load fast.
+- **Markdown and MDX** hold the content. Every post is a text file in the repo.
+- **GitHub** stores it. Every content change is a commit I can see and revert.
+- **Cloudflare Pages** hosts it. It builds and deploys on every push to the main branch.
+- **Claude Code** does the building. It reads and writes the repo directly.
+
+None of this is exotic. The interesting part isn't the tools, it's who operates them.
+
+## Am I a developer? Not really, and that's the point
+
+I know HTML and CSS well enough to be dangerous, as well as the basics of JavaScript. I'm not a high-level front-end developer, and I'm not a back-end developer yet either.
+
+With an AI-first workflow, I don't have to be. I describe the change I want, the AI writes the code into the repo, and I review the diff before it ships. My job is direction and judgment, not syntax.
+
+<Figure
+  src={aiEditDiff}
+  alt="A code diff in the Cursor editor. New CSS lines, highlighted in green, add styling for numbered lists directly below the existing styling for bulleted lists."
+  caption="A real example from this post: the numbered list further down wasn't displaying, so the AI wrote this fix and I reviewed the diff before it shipped."
+/>
+
+That only works because the content and the code sit in the same place, in plain text, where the AI can reach both.
+
+## Why not just use a CMS?
+
+I looked at one. EmDash is an open-source CMS built on Astro and heavily optimized for Cloudflare, and it's a genuinely good project. I still passed on it.
+
+The reason is the whole thesis. EmDash stores content in a database behind an admin interface. My content lives as files in the repo, where an AI can read it, edit it, diff it, and version it natively. A database puts the content behind a dashboard the agent can't reach.
+
+For an AI-first workflow, that's a downgrade. The AI is the CMS.
+
+I've deferred a database-backed editor rather than ruled it out. If a non-technical client ever needs a friendly editing interface, that's when it earns its place.
+
+## How do you move DNS without breaking email?
+
+This part was a non-event for me. I've been working in DNS for a long time, and my inbox isn't exactly a firehose of mission-critical email right now. The stakes were low.
+
+But if you're moving a business that lives in its inbox, slow down. DNS is one wrong record away from quietly bouncing your customers' email, and you won't find out until someone calls to ask why you never replied. Here's the order I'd follow, and the one I followed anyway:
+
+1. Export the full BIND zone file from the old account.
+2. Add the domain to the new account and import that file.
+3. Verify every record (17 in my case) and its proxy setting against the original.
+4. Switch nameservers at the registrar only after everything matches.
+
+Google Workspace never missed a beat. It's the same lesson I learned on the jiu-jitsu mat: the boring fundamentals are what keep you out of trouble. Export, import, verify, then cut over. Never cut over first.
+
+## What actually broke?
+
+Caching. Cloudflare Pages caches your homepage HTML at the edge. I'd push a change, watch the build go green, refresh the site, and get the old page.
+
+So I did what everyone does. I stared at the green checkmark, refreshed again, and started assuming I'd broken something. I hadn't. It was the cache.
+
+The fix is a GitHub Action that purges the cache after each deploy. The catch that had me scratching my head: the action does nothing until you set two repository secrets, `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ZONE_ID`. Without them it still runs, still reports success, and purges nothing. A green checkmark for doing absolutely nothing. Love that.
+
+If a deploy looks stale, load the page in a browser with `?v=123` on the end before you go hunting through your code. Most tools that fetch a URL for you cache it too, and will happily tell you the old page is the live one.
+
+## What's it actually like to use?
+
+I update my site by describing the change I want.
+
+The AI edits the Markdown, commits it, and Cloudflare has it live in about thirty seconds. No dashboard, no plugin updates, no late-night email telling me my site needs attention. This post got published the same way.
+
+## Would I do it again?
+
+Yes, and I am. The whole build is public, and I'm packaging it into a starter kit you can fork.
+
+Two honest caveats. If you're not comfortable in Git, the learning curve is real and front-loaded. And if you're building for a client who needs to edit their own content in a friendly interface, a traditional CMS is still the better answer today.
+
+But for a marketer or solo operator who wants speed, control, and an AI that can actually touch every part of the site, repo-first is the best setup I've used in 18 years. I didn't expect to get excited about building a website again. I did.
+
+I'm documenting the whole build as I go. If you want the starter kit when it's ready, [get on the list](/).

@@ -220,6 +220,13 @@
     font-family: var(--font-heading);
   }
 
+  /* Tailwind v4 made buttons cursor: default. Restore the pointer so the theme
+     toggle and the signup CTA read as clickable. */
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
   ::selection {
     background: var(--color-primary);
     color: #0b1220;

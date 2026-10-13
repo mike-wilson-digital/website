@@ -217,6 +217,14 @@ const { class: className = '' } = Astro.props;
 				if (res.ok) {
 					form.reset();
 					setStatus('success', SUCCESS_MSG);
+					// GA4 (via GTM): fires only on a confirmed Kit success (never on honeypot).
+					const w = window as unknown as { dataLayer?: Record<string, unknown>[] };
+					w.dataLayer = w.dataLayer || [];
+					w.dataLayer.push({
+						event: 'sign_up',
+						method: 'kit',
+						form_location: location.pathname.replace(/\/$/, '') === '/links' ? 'links' : 'home',
+					});
 				} else {
 					setStatus('error', ERROR_MSG);
 				}

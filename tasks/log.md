@@ -6,6 +6,22 @@ is completed or blocked.
 
 ---
 
+## 2026-10-13 — GA4 event tracking + /sitemap.xml redirect
+
+Ad-hoc task from the command center (not via `tasks/next.md`).
+
+- **dataLayer events (success-only):** `/contact` pushes `generate_lead` (`form_name: contact`)
+  after a confirmed Web3Forms success; `SignupForm` pushes `sign_up` (`method: kit`,
+  `form_location: home|links`) after a confirmed Kit success, never on the honeypot path.
+  `/links` already pushed `link_click` (`link_name`) but GTM had no tag for it until now.
+- **GTM (`GTM-NPHB48ZL`, workspace 3):** DLVs `form_location` + `link_name`; Custom Event
+  triggers `CE - generate_lead|sign_up|link_click`; matching GA4 Event tags on
+  `{{GA4 Measurement ID}}`. Mike tests in Preview + publishes.
+- **`public/_redirects`:** `/sitemap.xml` → `/sitemap-index.xml` (301) for tools that guess.
+- **GSC:** `sitemap-index.xml` submitted 10/13 (Domain property); "Couldn't fetch" on first
+  submit with no Last read — re-check in 24-72h.
+
+
 ## 2026-08-07 — Blog engine (build-in-public spine)
 
 Stood up a repo-first blog on the existing design system (no restyle, no new fonts/colors).

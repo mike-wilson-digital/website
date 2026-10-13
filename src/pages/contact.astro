@@ -141,6 +141,10 @@ import Layout from '../layouts/Layout.astro';
 			if (res.ok && result.success) {
 				form.reset();
 				setStatus('success', "Thanks — your message is on its way. I'll get back to you soon.");
+				// GA4 (via GTM): fires only on a confirmed Web3Forms success.
+				const w = window as unknown as { dataLayer?: Record<string, unknown>[] };
+				w.dataLayer = w.dataLayer || [];
+				w.dataLayer.push({ event: 'generate_lead', form_name: 'contact' });
 			} else {
 				setStatus('error', result.message || 'Something went wrong. Please try again.');
 			}

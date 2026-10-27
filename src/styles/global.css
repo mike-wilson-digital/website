@@ -139,6 +139,9 @@
   /* Dark accent (palette dark-mode section). Used for focus, the
      floating-label focus color, the primary CTA, and hovers. */
   --primary: #f97316;
+  /* Text selection: solid orange with near-black text (~6.7:1). */
+  --selection-bg: #f97316;
+  --selection-text: #0b1220;
   --primary-hover: #ea580c;
   --primary-soft: #3a1d12;
 
@@ -173,6 +176,10 @@
   --field-border: #cbd5e1;
 
   --primary: #dd3300;
+  /* Text selection: a light orange tint with the normal text color (~12.6:1).
+     The solid #dd3300 with dark text was only ~4:1, too low for body text. */
+  --selection-bg: rgba(221, 51, 0, 0.2);
+  --selection-text: var(--text);
   --primary-hover: #c2410c;
   --primary-soft: #fff1e8;
 
@@ -228,8 +235,8 @@
   }
 
   ::selection {
-    background: var(--color-primary);
-    color: #0b1220;
+    background: var(--selection-bg);
+    color: var(--selection-text);
   }
 }
 

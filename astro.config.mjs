@@ -21,7 +21,7 @@ export default defineConfig({
 		mdx(),
 		sitemap({
 			// Keep noindex pages out of the sitemap. Blog pages are included.
-			filter: (page) => !/\/(contact|privacy|links)\/?$/.test(page),
+			filter: (page) => !/\/(contact|privacy|links|404)\/?$/.test(page),
 		}),
 	],
 	vite: {

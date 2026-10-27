@@ -1,0 +1,122 @@
+---
+title: 'Why do AI-built websites all look the same?'
+description: 'AI-built websites look the same because AI builds the average of what it has seen. Here is the design doc I use to make my AI build a site that looks like mine.'
+pubDate: 2026-10-27
+draft: false
+tags: ['ai-first', 'design', 'astro']
+---
+
+import Figure from '../../components/Figure.astro';
+import antiGenericTable from '../../assets/blog/why-do-ai-built-websites-all-look-the-same/anti-generic-table.png';
+
+AI builds the most likely design, which is the average of every website it learned from. Give it no direction and you get the defaults: a centered hero, three feature cards, rounded corners everywhere, and a purple gradient. The fix isn't a better prompt. It's a design doc the AI reads before every change.
+
+A commenter on my last post put it bluntly: "The problem with AI websites - they all look the same." He's right about most of them. Here's why it happens, and the doc I use so mine doesn't.
+
+## Why do AI websites all look the same?
+
+Because the AI fills every decision you didn't make with the most common answer. Stack enough of those together and you get a look you've seen a hundred times:
+
+- Everything in a box, often boxes inside boxes
+- Rounded corners on everything, usually 8 to 12 pixels
+- Inter for the text, plus one more sans-serif for headings
+- Slate gray with a single indigo, violet, or blue accent
+- A centered hero, then three features in a row, then a call to action
+- Soft gradients and glowing dots for decoration
+- Copy like "empower your journey"
+
+None of these are wrong on their own. Together, they're the look of a site nobody made a decision about.
+
+I've been producing music since the late '90s, and producers have a name for this: the preset sound. Load the same factory synth patch as everyone else, and your track sounds like everyone else's. AI defaults are the preset.
+
+## Is that the AI's fault?
+
+No. The AI does what it's told. If you don't tell it much, you get the average.
+
+A prompt like "make it modern and clean" doesn't help, because modern and clean *is* the average. What changes the result is giving the AI specific decisions it has to follow, every time, in writing.
+
+## What goes in a design doc?
+
+My site has one: `docs/design-principles.md`, about 250 lines in the repo. It opens with one idea: the site is the proof. My audience builds things, and a site that looks generated would quietly undercut the method I'm writing about.
+
+Here's what's in it:
+
+- **A list of generic tells, each with the rule that replaces it.** Rounded corners everywhere becomes "sharp by default," with a 3px radius. Boxes inside boxes become thin divider lines and white space. A centered layout becomes left-aligned, with uneven spacing on purpose.
+- **Three fonts, each with a job.** Satoshi for headings, Sentient (a serif) for reading, and Commit Mono for labels, buttons, and code. The doc sums it up as "serif = read, sans = state, mono = operate." The serif body alone breaks the all-sans look most AI sites have.
+- **One loud color.** Orange (#DD3300) for the call to action, and never for body text. Everything else is slate.
+- **A few signature details, used sparingly.** A faint dot grid behind every page, path-style labels like `~/blog`, and a file-tree footer.
+- **A "do not build" list.** No fake terminal hero, no typewriter headline, no matrix rain, no glitch text. Neo can keep the matrix rain. The doc puts it this way: "restraint reads as senior; excess reads as costume."
+- **Non-negotiables.** Accessible contrast, full keyboard navigation, reduced-motion support, and a Lighthouse score of 95 or higher. Fast is part of the design.
+
+<Figure
+  src={antiGenericTable}
+  alt="A table in my design doc listing generic AI website patterns, such as card-on-card stacks, rounded corners everywhere, and a centered hero with three features, each paired with the rule that replaces it."
+  caption="The anti-generic table from my design doc. Each common AI default gets a rule that replaces it."
+/>
+
+## How do you get the AI to actually follow it?
+
+You make reading it part of the AI's instructions. Claude Code reads a `CLAUDE.md` file in the project before it does anything. Mine points straight at the design doc:
+
+```md
+## Design
+
+All design and styling decisions follow docs/design-principles.md ...
+Read it before any styling, component, or page work, and build against it
+rather than reaching for defaults. If a default and that doc disagree, the doc wins.
+```
+
+That last line does most of the work. When the AI has to choose between its default and my rule, the rule wins.
+
+The second half is review. Every change shows up as a diff before it goes live, so when something drifts back toward the defaults, I catch it and point to the rule.
+
+## What does restraint look like in practice?
+
+Last week I wanted an animated background. Something techy and low-key, just enough to impress.
+
+I asked my AI about it, and it pushed back by quoting my own design doc at me. The dot grid is "the *only* sanctioned background treatment." The page already has one moving element, the ring around the email signup, and a second one would compete with it. And animated backgrounds are one of the most common AI-site looks right now, which was the whole point of this post.
+
+It was right. Annoyingly right. I kept the dot grid. (A cursor-reactive version of it is parked for later, but it has to earn its way in.)
+
+That's the real value of the doc. It isn't only instructions for the AI. It holds me to decisions I already made, even when I'm the one trying to break them.
+
+## How do you write one for your own site?
+
+Start small. A page of real decisions beats ten pages of vibes.
+
+1. **List the generic patterns you want to avoid.** Look at a few AI-built sites and write down what they have in common.
+2. **Pick one signature.** One idea that makes the site yours. Mine is "developer-native": mono labels, a visible grid, and real code as content.
+3. **Choose two or three fonts and give each a job.** Reading, headings, and labels.
+4. **Pick one loud color**, and say where it's allowed.
+5. **Write a "do not build" list.** It's often more useful than the "do" list.
+6. **Point your AI at it.** `CLAUDE.md` for Claude Code, `AGENTS.md` for Codex and other tools, or your editor's rules file. Tell it the doc wins over defaults.
+
+Then keep it current. When you make a design call in a conversation, add it to the doc so the next session knows.
+
+## When does this not matter?
+
+For a quick landing page to test an idea, or an internal tool only your team sees, the defaults are fine. Spend the time on the idea instead.
+
+It matters when the site *is* the pitch: a personal brand, a business, or anything where looking like everyone else costs you trust.
+
+## Quick questions
+
+### Can't I just prompt "make it unique"?
+
+You can, but you'll get a random change that doesn't hold. The next session starts from the defaults again. A doc in the project carries your decisions into every session.
+
+### Do I need a designer?
+
+You need opinions, not a job title. A design doc is a list of decisions. If you can say what you like, what you don't, and why, you can write one.
+
+### Does this work with Cursor or Codex?
+
+Yes. Any AI coding tool that reads an instructions file can follow a design doc. Codex reads `AGENTS.md`, Claude Code reads `CLAUDE.md`, and Cursor has its own rules files.
+
+### How long should a design doc be?
+
+Mine is about 250 lines. Start with one page and grow it as you make decisions.
+
+---
+
+The starter kit I'm building will include a design doc template you can fork. If you want it when it's ready, [get on the list](/).
